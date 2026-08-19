@@ -272,26 +272,6 @@ h1,h2,h3{font-family:var(--font-display); font-weight:700; letter-spacing:-.02em
 .project .desc{position:relative; z-index:1; margin-top:12px; font-size:14px; color:var(--gray); max-width:420px;}
 
 /* ============================================================
-   EXPERIENCE — video-editing timeline
-   ============================================================ */
-#experience h2{font-size:clamp(30px,4vw,46px); margin-bottom:60px;}
-.timeline{position:relative; padding-left:26px;}
-.timeline::before{content:''; position:absolute; left:0; top:6px; bottom:6px; width:1px; background:var(--line);}
-.tl-item{position:relative; padding-bottom:56px;}
-.tl-item:last-child{padding-bottom:0;}
-.tl-item::before{
-  content:''; position:absolute; left:-30px; top:6px; width:9px; height:9px; border-radius:50%;
-  background:var(--paper); border:1.5px solid var(--ink);
-}
-.tl-item.current::before{background:var(--accent); border-color:var(--accent);}
-.tl-item .when{font-family:var(--font-mono); font-size:11px; color:var(--accent); letter-spacing:.05em; margin-bottom:6px;}
-.tl-item.current .when{color:var(--accent);}
-.tl-item:not(.current) .when{color:var(--gray);}
-.tl-item h3{font-size:clamp(19px,2.4vw,25px); font-weight:600;}
-.tl-item .org{font-family:var(--font-mono); font-size:12px; color:var(--gray); margin-top:4px;}
-.tl-item p{margin-top:12px; max-width:640px; color:#3a3934; font-size:15px; line-height:1.6;}
-
-/* ============================================================
    SKILLS grid
    ============================================================ */
 #skills h2{font-size:clamp(30px,4vw,46px); margin-bottom:50px;}
@@ -350,7 +330,6 @@ footer{
   <a href="#about"></a>
   <a href="#expertise"></a>
   <a href="#work"></a>
-  <a href="#experience"></a>
   <a href="#skills"></a>
   <a href="#contact"></a>
 </nav>
@@ -464,42 +443,6 @@ footer{
 </section>
 
 <!-- ============================================================
-     EXPERIÊNCIA — timeline
-     ============================================================ -->
-<section id="experience">
-  <div class="wrap">
-    <div class="eyebrow" data-i18n="exp.eyebrow">TRAJETÓRIA</div>
-    <h2 data-i18n="exp.title">Experiência profissional</h2>
-    <div class="timeline">
-      <div class="tl-item current">
-        <div class="when" data-i18n="exp.i1.when">MAIO 2024 — ATUAL</div>
-        <h3 data-i18n="exp.i1.role">Designer Gráfico</h3>
-        <div class="org">Sintegra Surgical Sciences — Marketing</div>
-        <p data-i18n="exp.i1.desc">Design gráfico, identidade visual e motion graphics para marketing médico-hospitalar; organização e cobertura de eventos, montagem de estandes; produção de vídeos 3D de técnicas cirúrgicas.</p>
-      </div>
-      <div class="tl-item">
-        <div class="when">2018 — 2021</div>
-        <h3 data-i18n="exp.i2.role">Piloto de Drones &amp; Fotógrafo</h3>
-        <div class="org">Guaradrones (M.E.I.)</div>
-        <p data-i18n="exp.i2.desc">Captação aérea, mapeamento e fotogrametria com linha DJI, regulamentação ANAC e elaboração de peças gráficas.</p>
-      </div>
-      <div class="tl-item">
-        <div class="when">2018 — 2021</div>
-        <h3 data-i18n="exp.i3.role">Professor de Áudio Visual, Informática e Inclusão Digital</h3>
-        <div class="org">Prefeitura Municipal de Guararema</div>
-        <p data-i18n="exp.i3.desc">Planejamento e execução de cursos de tecnologia, edição de vídeo e desenvolvimento de jogos para jovens, idosos e profissionais em formação.</p>
-      </div>
-      <div class="tl-item">
-        <div class="when">2011 — 2023</div>
-        <h3 data-i18n="exp.i4.role">Fotógrafo e Videomaker</h3>
-        <div class="org">Greenpixel — Produtora</div>
-        <p data-i18n="exp.i4.desc">Captação, edição, VFX e pilotagem de drones para produções da Greenpixel.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
      SKILLS
      ============================================================ -->
 <section id="skills">
@@ -566,12 +509,6 @@ const i18n = {
     "work.p2.title":"Mapeamento aéreo","work.p2.desc":"Captação e mapeamento aéreo com toda a linha DJI, do pequeno ao grande porte.",
     "work.p3.title":"VFX & pós-produção","work.p3.desc":"Efeitos visuais e pós-produção para clientes da produtora Greenpixel.",
     "work.p4.title":"Identidade visual","work.p4.desc":"Espaço reservado — adicione seu projeto de marca ou identidade visual favorito.",
-    "exp.eyebrow":"TRAJETÓRIA","exp.title":"Experiência profissional",
-    "exp.i1.when":"MAIO 2024 — ATUAL","exp.i1.role":"Designer Gráfico",
-    "exp.i1.desc":"Design gráfico, identidade visual e motion graphics para marketing médico-hospitalar; organização e cobertura de eventos, montagem de estandes; produção de vídeos 3D de técnicas cirúrgicas.",
-    "exp.i2.role":"Piloto de Drones & Fotógrafo","exp.i2.desc":"Captação aérea, mapeamento e fotogrametria com linha DJI, regulamentação ANAC e elaboração de peças gráficas.",
-    "exp.i3.role":"Professor de Áudio Visual, Informática e Inclusão Digital","exp.i3.desc":"Planejamento e execução de cursos de tecnologia, edição de vídeo e desenvolvimento de jogos para jovens, idosos e profissionais em formação.",
-    "exp.i4.role":"Fotógrafo e Videomaker","exp.i4.desc":"Captação, edição, VFX e pilotagem de drones para produções da Greenpixel.",
     "skills.eyebrow":"FERRAMENTAS & COMPETÊNCIAS","skills.title":"Como eu trabalho",
     "skills.blender":"Desde o lançamento","skills.game":"Engines & interatividade","skills.tex":"Texturização 3D",
     "skills.drone":"Drones & mapeamento aéreo","skills.dev.title":"Programação","skills.social.title":"Mídias Sociais",
@@ -602,12 +539,6 @@ const i18n = {
     "work.p2.title":"Aerial mapping","work.p2.desc":"Aerial capture and mapping using the full DJI line, from small to large scale.",
     "work.p3.title":"VFX & post-production","work.p3.desc":"Visual effects and post-production for Greenpixel's clients.",
     "work.p4.title":"Visual identity","work.p4.desc":"Reserved slot — add your favorite branding or identity project here.",
-    "exp.eyebrow":"TRAJECTORY","exp.title":"Professional experience",
-    "exp.i1.when":"MAY 2024 — PRESENT","exp.i1.role":"Graphic Designer",
-    "exp.i1.desc":"Graphic design, visual identity and motion graphics for medical/hospital marketing; event organization and coverage, booth setup; 3D video production of surgical techniques.",
-    "exp.i2.role":"Drone Pilot & Photographer","exp.i2.desc":"Aerial capture, mapping and photogrammetry with the DJI line, ANAC regulation compliance, and graphic design.",
-    "exp.i3.role":"Audiovisual, IT & Digital Inclusion Instructor","exp.i3.desc":"Planning and running technology, video editing and game development courses for teens, seniors and professionals in training.",
-    "exp.i4.role":"Photographer and Videomaker","exp.i4.desc":"Capture, editing, VFX and drone piloting for Greenpixel productions.",
     "skills.eyebrow":"TOOLS & SKILLS","skills.title":"How I work",
     "skills.blender":"Since launch","skills.game":"Engines & interactivity","skills.tex":"3D texturing",
     "skills.drone":"Drones & aerial mapping","skills.dev.title":"Programming","skills.social.title":"Social Media",
@@ -677,7 +608,7 @@ const io = new IntersectionObserver((entries)=>{
   });
 },{threshold:0.2});
 
-document.querySelectorAll('#about, #work .project, #experience .tl-item, #skills .cell, #contact .wrap').forEach(el=>{
+document.querySelectorAll('#about, #work .project, #skills .cell, #contact .wrap').forEach(el=>{
   el.classList.add('reveal'); io.observe(el);
 });
 
