@@ -1,0 +1,1 @@
+Coloque aqui exportações .glb do Blender, se quiser 3D interativo no site.

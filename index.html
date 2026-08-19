@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gustavo Vecchiatti Aguiar — Design, Motion &amp; 3D</title>
+<meta name="description" content="Gustavo Vecchiatti Aguiar — Designer gráfico, motion designer e artista 3D. Especialista em Blender, produção audiovisual, drones e comunicação visual para o setor de saúde.">
+<meta name="keywords" content="design gráfico, motion graphics, produção audiovisual, blender 3d, edição de vídeo, VFX, marketing digital, identidade visual, branding, UI/UX, pilotagem de drone, mapeamento aéreo, marketing hospitalar, gestão de projetos, unity, unreal engine">
+<meta name="author" content="Gustavo Vecchiatti Aguiar">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Gustavo Vecchiatti Aguiar — Design, Motion & 3D">
+<meta property="og:description" content="Portfólio de design gráfico, motion graphics, 3D e produção audiovisual.">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Newsreader:ital,wght@0,400;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --paper:#faf9f6;
+  --paper-dim:#f0efe9;
+  --ink:#121212;
+  --gray:#6b6a63;
+  --line:#dcdad0;
+  --accent:#ff3b30;      /* rec red — signature accent */
+  --accent-2:#1e40ff;    /* cobalt — sparing use */
+  --font-display:'Space Grotesk', sans-serif;
+  --font-serif:'Newsreader', serif;
+  --font-mono:'IBM Plex Mono', monospace;
+  --wipe: cubic-bezier(.77,0,.18,1);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-display);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block;}
+a{color:inherit;}
+::selection{background:var(--accent);color:#fff;}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+}
+
+/* ============================================================
+   TIMELINE SCRUBBER — signature element (fixed top bar)
+   ============================================================ */
+#scrubber{
+  position:fixed; top:0; left:0; right:0; height:34px;
+  z-index:1000;
+  background:rgba(250,249,246,.9);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);
+  display:flex; align-items:center;
+  padding:0 18px;
+  font-family:var(--font-mono);
+  font-size:11px;
+  letter-spacing:.02em;
+  color:var(--gray);
+}
+#scrubber .rec{
+  display:flex; align-items:center; gap:6px; margin-right:16px; color:var(--ink); flex:0 0 auto;
+}
+#scrubber .rec .dot{
+  width:7px;height:7px;border-radius:50%;background:var(--accent);
+  animation:pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.35;transform:scale(.7);}}
+#scrubber .track{
+  position:relative; flex:1 1 auto; height:2px; background:var(--line); margin:0 14px;
+}
+#scrubber .track .fill{
+  position:absolute; top:0; left:0; height:100%; width:0%; background:var(--ink);
+}
+#scrubber .track .heads{
+  position:absolute; top:-4px; left:0; right:0; display:flex; justify-content:space-between;
+}
+#scrubber .track .heads span{
+  width:1px; height:10px; background:var(--line);
+}
+#scrubber .code{flex:0 0 auto; min-width:78px; text-align:right;}
+#scrubber .langtoggle{
+  flex:0 0 auto; margin-left:16px; display:flex; gap:2px; border:1px solid var(--line); border-radius:20px; overflow:hidden;
+}
+#scrubber .langtoggle button{
+  font-family:var(--font-mono); font-size:10px; letter-spacing:.05em; background:none; border:none;
+  padding:4px 10px; cursor:pointer; color:var(--gray);
+}
+#scrubber .langtoggle button.active{background:var(--ink); color:var(--paper);}
+
+/* ============================================================
+   LAYOUT HELPERS
+   ============================================================ */
+.wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+section{position:relative; padding:160px 0; border-bottom:1px solid var(--line);}
+@media (max-width:720px){ section{padding:96px 0;} .wrap{padding:0 22px;} }
+
+.eyebrow{
+  font-family:var(--font-mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--accent); display:flex; align-items:center; gap:10px; margin-bottom:22px;
+}
+.eyebrow::before{content:'';width:22px;height:1px;background:var(--accent);}
+
+h1,h2,h3{font-family:var(--font-display); font-weight:700; letter-spacing:-.02em; line-height:1.02;}
+
+.reveal{
+  clip-path:inset(0 0 0 0);
+  opacity:0; transform:translateY(28px);
+  transition:opacity .9s var(--wipe), transform .9s var(--wipe);
+}
+.reveal.in{opacity:1; transform:translateY(0);}
+.reveal-wipe{
+  position:relative; overflow:hidden;
+}
+.reveal-wipe::after{
+  content:''; position:absolute; inset:0; background:var(--ink);
+  transform-origin:right; transform:scaleX(1);
+  transition:transform .8s var(--wipe);
+  z-index:2;
+}
+.reveal-wipe.in::after{transform:scaleX(0);}
+
+/* ============================================================
+   NAV DOTS (side, desktop only)
+   ============================================================ */
+#navdots{
+  position:fixed; right:26px; top:50%; transform:translateY(-50%); z-index:900;
+  display:flex; flex-direction:column; gap:14px;
+}
+#navdots a{
+  width:8px; height:8px; border-radius:50%; background:var(--line); display:block;
+  transition:background .3s, transform .3s;
+}
+#navdots a.active{background:var(--ink); transform:scale(1.4);}
+@media (max-width:900px){ #navdots{display:none;} }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+#hero{
+  min-height:100vh; display:flex; flex-direction:column; justify-content:center;
+  padding-top:34px; border-bottom:1px solid var(--line);
+}
+#hero .grid{
+  display:grid; grid-template-columns:1fr; gap:8px;
+}
+.hero-kicker{
+  font-family:var(--font-mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--gray);
+  margin-bottom:18px;
+}
+#hero h1{
+  font-size:clamp(48px,9vw,132px);
+  text-transform:uppercase;
+}
+#hero h1 span{display:block; overflow:hidden;}
+#hero h1 span em{
+  display:block; font-style:normal;
+  transform:translateY(110%);
+  animation:riseUp .9s var(--wipe) forwards;
+}
+#hero h1 span:nth-child(1) em{animation-delay:.05s;}
+#hero h1 span:nth-child(2) em{animation-delay:.18s; color:transparent; -webkit-text-stroke:1.5px var(--ink);}
+@keyframes riseUp{to{transform:translateY(0);}}
+
+#hero .role{
+  margin-top:26px; max-width:640px;
+  font-family:var(--font-serif); font-style:italic; font-weight:400;
+  font-size:clamp(18px,2.2vw,26px); color:var(--gray); line-height:1.5;
+}
+#hero .role strong{font-style:normal; color:var(--ink); font-weight:500;}
+
+#hero .meta{
+  margin-top:56px; display:flex; flex-wrap:wrap; gap:34px;
+  font-family:var(--font-mono); font-size:12px; color:var(--gray);
+}
+#hero .meta div span{display:block; color:var(--ink); font-size:13px; margin-top:4px;}
+
+.scrolldown{
+  position:absolute; bottom:36px; left:32px;
+  display:flex; align-items:center; gap:10px;
+  font-family:var(--font-mono); font-size:11px; color:var(--gray); letter-spacing:.08em;
+}
+.scrolldown .bar{width:1px; height:34px; background:var(--line); position:relative; overflow:hidden;}
+.scrolldown .bar::after{
+  content:''; position:absolute; top:-100%; left:0; width:100%; height:100%; background:var(--ink);
+  animation:scrollbar 1.8s ease-in-out infinite;
+}
+@keyframes scrollbar{0%{top:-100%;}50%{top:0;}100%{top:100%;}}
+
+/* parallax layers in hero background */
+.parallax-field{position:absolute; inset:0; z-index:-1; pointer-events:none; overflow:hidden;}
+.parallax-field .word{
+  position:absolute; font-family:var(--font-display); font-weight:700;
+  color:var(--paper-dim); font-size:14vw; white-space:nowrap; letter-spacing:-.02em;
+  user-select:none;
+}
+
+/* ============================================================
+   SOBRE (About) — storytelling
+   ============================================================ */
+#about .cols{
+  display:grid; grid-template-columns:0.9fr 1.1fr; gap:70px; align-items:start;
+}
+@media (max-width:860px){ #about .cols{grid-template-columns:1fr; gap:36px;} }
+#about .portrait{
+  aspect-ratio:4/5; background:linear-gradient(155deg,var(--paper-dim),#e6e4da);
+  border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-mono); font-size:11px; color:var(--gray); text-align:center; padding:20px;
+  position:sticky; top:70px;
+}
+#about h2{font-size:clamp(30px,4vw,46px); margin-bottom:30px;}
+#about .story p{
+  font-family:var(--font-serif); font-size:clamp(18px,2vw,22px); line-height:1.65; color:#2b2a26;
+  margin-bottom:22px;
+}
+#about .story p.pull{
+  font-style:italic; color:var(--ink); border-left:2px solid var(--accent); padding-left:22px; margin:36px 0;
+}
+#about .facts{
+  margin-top:46px; display:grid; grid-template-columns:repeat(3,1fr); gap:24px;
+  border-top:1px solid var(--line); padding-top:26px;
+}
+#about .facts div b{display:block; font-size:26px; font-family:var(--font-display);}
+#about .facts div span{font-family:var(--font-mono); font-size:11px; color:var(--gray); text-transform:uppercase; letter-spacing:.05em;}
+
+/* ============================================================
+   MARQUEE — Áreas de Atuação (keywords for SEO + visual)
+   ============================================================ */
+#expertise{padding:0; overflow:hidden; border-bottom:1px solid var(--line);}
+.marquee{
+  display:flex; white-space:nowrap; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  padding:26px 0;
+}
+.marquee:nth-child(2){border-top:none;}
+.marquee .track{display:flex; animation:scroll 42s linear infinite;}
+.marquee.rev .track{animation-direction:reverse;}
+.marquee span{
+  font-family:var(--font-display); font-weight:600; font-size:clamp(26px,4vw,46px);
+  text-transform:uppercase; padding:0 26px; color:var(--ink); display:flex; align-items:center; gap:26px;
+}
+.marquee span::after{content:'—'; color:var(--accent);}
+@keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ============================================================
+   WORK — portfolio grid
+   ============================================================ */
+#work h2{font-size:clamp(30px,4vw,46px); margin-bottom:12px;}
+#work .lead{font-family:var(--font-serif); font-style:italic; color:var(--gray); max-width:560px; margin-bottom:60px; font-size:19px;}
+.projects{display:grid; grid-template-columns:repeat(2,1fr); gap:2px; background:var(--line); border:1px solid var(--line);}
+@media (max-width:760px){ .projects{grid-template-columns:1fr;} }
+.project{
+  background:var(--paper); padding:34px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between;
+  position:relative; overflow:hidden;
+}
+.project .thumb{
+  position:absolute; inset:0; z-index:0;
+  background:linear-gradient(155deg,var(--paper-dim) 0%, #eceade 100%);
+  transform:scale(1.0); transition:transform .7s var(--wipe);
+}
+.project:hover .thumb{transform:scale(1.06);}
+.project .num, .project .title, .project .tags{position:relative; z-index:1;}
+.project .num{font-family:var(--font-mono); font-size:12px; color:var(--gray);}
+.project .title{font-size:clamp(22px,2.4vw,30px); font-weight:700; margin-top:130px;}
+.project .tags{margin-top:14px; font-family:var(--font-mono); font-size:11px; color:var(--gray); letter-spacing:.03em;}
+.project .desc{position:relative; z-index:1; margin-top:12px; font-size:14px; color:var(--gray); max-width:420px;}
+
+/* ============================================================
+   EXPERIENCE — video-editing timeline
+   ============================================================ */
+#experience h2{font-size:clamp(30px,4vw,46px); margin-bottom:60px;}
+.timeline{position:relative; padding-left:26px;}
+.timeline::before{content:''; position:absolute; left:0; top:6px; bottom:6px; width:1px; background:var(--line);}
+.tl-item{position:relative; padding-bottom:56px;}
+.tl-item:last-child{padding-bottom:0;}
+.tl-item::before{
+  content:''; position:absolute; left:-30px; top:6px; width:9px; height:9px; border-radius:50%;
+  background:var(--paper); border:1.5px solid var(--ink);
+}
+.tl-item.current::before{background:var(--accent); border-color:var(--accent);}
+.tl-item .when{font-family:var(--font-mono); font-size:11px; color:var(--accent); letter-spacing:.05em; margin-bottom:6px;}
+.tl-item.current .when{color:var(--accent);}
+.tl-item:not(.current) .when{color:var(--gray);}
+.tl-item h3{font-size:clamp(19px,2.4vw,25px); font-weight:600;}
+.tl-item .org{font-family:var(--font-mono); font-size:12px; color:var(--gray); margin-top:4px;}
+.tl-item p{margin-top:12px; max-width:640px; color:#3a3934; font-size:15px; line-height:1.6;}
+
+/* ============================================================
+   SKILLS grid
+   ============================================================ */
+#skills h2{font-size:clamp(30px,4vw,46px); margin-bottom:50px;}
+.skillgrid{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
+@media (max-width:820px){ .skillgrid{grid-template-columns:repeat(2,1fr);} }
+.skillgrid .cell{background:var(--paper); padding:26px 20px; min-height:120px; display:flex; flex-direction:column; justify-content:space-between;}
+.skillgrid .cell h4{font-size:16px; font-weight:600;}
+.skillgrid .cell span{font-family:var(--font-mono); font-size:10.5px; color:var(--gray); text-transform:uppercase; letter-spacing:.04em;}
+.skillgrid .cell.hi{background:var(--ink); color:var(--paper);}
+.skillgrid .cell.hi span{color:#b8b6ac;}
+
+/* langs + education mini section */
+#lang-edu .cols2{display:grid; grid-template-columns:1fr 1fr; gap:60px;}
+@media (max-width:720px){ #lang-edu .cols2{grid-template-columns:1fr; gap:40px;} }
+#lang-edu h3{font-size:14px; font-family:var(--font-mono); text-transform:uppercase; letter-spacing:.08em; color:var(--gray); margin-bottom:22px;}
+.langrow{display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-bottom:1px solid var(--line); font-size:16px;}
+.langrow .lvl{font-family:var(--font-mono); font-size:11px; color:var(--gray);}
+.edurow{padding:14px 0; border-bottom:1px solid var(--line);}
+.edurow b{font-size:16px; display:block;}
+.edurow span{font-family:var(--font-mono); font-size:11px; color:var(--gray);}
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+#contact{border-bottom:none; padding-bottom:120px;}
+#contact h2{
+  font-size:clamp(38px,8vw,96px); line-height:.98; text-transform:uppercase;
+}
+#contact h2 a{
+  text-decoration:none; border-bottom:2px solid var(--accent);
+}
+#contact .row{
+  margin-top:60px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:30px;
+  font-family:var(--font-mono); font-size:13px;
+}
+#contact .row a{text-decoration:none; border-bottom:1px solid var(--line); padding-bottom:2px;}
+#contact .row a:hover{border-color:var(--ink);}
+
+footer{
+  font-family:var(--font-mono); font-size:11px; color:var(--gray);
+  display:flex; justify-content:space-between; padding:26px 32px;
+}
+@media (max-width:600px){ footer{flex-direction:column; gap:8px;} }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     TIMELINE SCRUBBER
+     ============================================================ -->
+<div id="scrubber">
+  <div class="rec"><span class="dot"></span><span data-i18n="scrubber.rec">REC</span></div>
+  <div class="track">
+    <div class="heads" id="scrubber-heads"></div>
+    <div class="fill" id="scrubber-fill"></div>
+  </div>
+  <div class="code" id="scrubber-code">00:00:00:00</div>
+  <div class="langtoggle">
+    <button data-lang="pt" class="active">PT</button>
+    <button data-lang="en">EN</button>
+  </div>
+</div>
+
+<nav id="navdots">
+  <a href="#hero" class="active"></a>
+  <a href="#about"></a>
+  <a href="#expertise"></a>
+  <a href="#work"></a>
+  <a href="#experience"></a>
+  <a href="#skills"></a>
+  <a href="#contact"></a>
+</nav>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section id="hero">
+  <div class="parallax-field">
+    <span class="word" data-speed="0.06" style="top:14%; left:-4%;">BLENDER</span>
+    <span class="word" data-speed="0.1" style="top:58%; left:30%;">MOTION</span>
+    <span class="word" data-speed="0.04" style="top:80%; left:-8%;">DESIGN</span>
+  </div>
+  <div class="wrap grid">
+    <div class="hero-kicker" data-i18n="hero.kicker">PORTFÓLIO — DESIGN / MOTION / 3D</div>
+    <h1>
+      <span><em>GUSTAVO</em></span>
+      <span><em>VECCHIATTI</em></span>
+    </h1>
+    <p class="role" data-i18n="hero.role">Designer gráfico e <strong>motion designer</strong> com mais de 10 anos transformando ideias complexas — cirurgias, marcas, produtos — em imagens que qualquer pessoa entende.</p>
+    <div class="meta">
+      <div data-i18n-group="hero.meta1"><span data-i18n="hero.meta1.label">BASEADO EM</span><span data-i18n="hero.meta1.value">Marília, SP — Brasil</span></div>
+      <div><span data-i18n="hero.meta2.label">ATUANDO EM</span><span data-i18n="hero.meta2.value">Design de Saúde &amp; Tecnologia</span></div>
+      <div><span data-i18n="hero.meta3.label">FERRAMENTA-ASSINATURA</span><span>Blender · open source</span></div>
+    </div>
+  </div>
+  <div class="scrolldown"><div class="bar"></div><span data-i18n="hero.scroll">ROLE PARA COMEÇAR</span></div>
+</section>
+
+<!-- ============================================================
+     SOBRE
+     ============================================================ -->
+<section id="about">
+  <div class="wrap cols">
+    <div class="portrait" data-i18n="about.portraitPlaceholder">[ Adicione aqui uma foto sua em<br>assets/images/portrait.jpg ]</div>
+    <div>
+      <div class="eyebrow" data-i18n="about.eyebrow">SOBRE MIM</div>
+      <h2 data-i18n="about.title">De pilotar drones a modelar cirurgias em 3D</h2>
+      <div class="story">
+        <p data-i18n="about.p1">Comecei filmando por paixão — um drone, uma câmera, a curiosidade de entender como uma imagem consegue contar uma história inteira em segundos. O que era hobby virou ofício: passei a editar vídeos, fotografar eventos e, pouco a pouco, a desenhar as peças gráficas que antes eu só admirava em outros trabalhos.</p>
+        <p class="pull" data-i18n="about.pull">"Aprendi Blender no lançamento, quando praticamente ninguém acreditava em software livre para produção profissional. Hoje uso essa mesma ferramenta open source para dar vida a técnicas cirúrgicas em 3D — a prova de que ferramenta gratuita não é sinônimo de resultado amador."</p>
+        <p data-i18n="about.p2">Também dei aulas — de informática, de edição, de programação de jogos — para adolescentes, idosos e profissionais em formação. Ensinar me ensinou a simplificar o complexo, uma habilidade que uso todos os dias na Sintegra Surgical Sciences, traduzindo procedimentos cirúrgicos densos em vídeos e materiais que médicos, pacientes e equipes de marketing entendem de imediato.</p>
+        <p data-i18n="about.p3">Hoje meu trabalho fica na interseção entre estética e clareza: design que comunica, motion que explica, 3D que aproxima o invisível do visível. E enquanto sigo aprendendo — cursando Design Gráfico e Marketing Digital, arriscando frases em italiano e alemão — continuo acreditando que a melhor ferramenta é a que te deixa mais perto de contar a história certa.</p>
+      </div>
+      <div class="facts">
+        <div><b>10+</b><span data-i18n="about.fact1">Anos de experiência</span></div>
+        <div><b>35</b><span data-i18n="about.fact2">Anos, brasileiro</span></div>
+        <div><b>4</b><span data-i18n="about.fact3">Idiomas em uso/estudo</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ÁREAS DE ATUAÇÃO — marquee keywords (SEO + visual)
+     ============================================================ -->
+<section id="expertise">
+  <div class="marquee">
+    <div class="track">
+      <span>Design Gráfico</span><span>Motion Graphics</span><span>Blender 3D</span><span>Produção Audiovisual</span><span>Identidade Visual</span><span>Branding</span>
+      <span>Design Gráfico</span><span>Motion Graphics</span><span>Blender 3D</span><span>Produção Audiovisual</span><span>Identidade Visual</span><span>Branding</span>
+    </div>
+  </div>
+  <div class="marquee rev">
+    <div class="track">
+      <span>UI/UX Design</span><span>VFX</span><span>Pilotagem de Drone</span><span>Marketing Hospitalar</span><span>Edição de Vídeo</span><span>Gestão de Projetos</span>
+      <span>UI/UX Design</span><span>VFX</span><span>Pilotagem de Drone</span><span>Marketing Hospitalar</span><span>Edição de Vídeo</span><span>Gestão de Projetos</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     WORK — projetos
+     ============================================================ -->
+<section id="work">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="work.eyebrow">PORTFÓLIO SELECIONADO</div>
+    <h2 data-i18n="work.title">Trabalhos recentes</h2>
+    <p class="lead" data-i18n="work.lead">Substitua os blocos abaixo por imagens, GIFs ou vídeos reais dos projetos — a estrutura já está pronta para receber seu material.</p>
+    <div class="projects">
+      <div class="project">
+        <div class="thumb"></div>
+        <div class="num">01 / SINTEGRA SURGICAL SCIENCES</div>
+        <div class="title" data-i18n="work.p1.title">Técnicas cirúrgicas em 3D</div>
+        <div class="tags">BLENDER · MOTION GRAPHICS · 2024—</div>
+        <div class="desc" data-i18n="work.p1.desc">Animações 3D de procedimentos cirúrgicos para comunicação científica e treinamento médico.</div>
+      </div>
+      <div class="project">
+        <div class="thumb"></div>
+        <div class="num">02 / GUARADRONES</div>
+        <div class="title" data-i18n="work.p2.title">Mapeamento aéreo</div>
+        <div class="tags">DRONE · FOTOGRAFIA · 2018—2021</div>
+        <div class="desc" data-i18n="work.p2.desc">Captação e mapeamento aéreo com toda a linha DJI, do pequeno ao grande porte.</div>
+      </div>
+      <div class="project">
+        <div class="thumb"></div>
+        <div class="num">03 / GREENPIXEL</div>
+        <div class="title" data-i18n="work.p3.title">VFX &amp; pós-produção</div>
+        <div class="tags">VÍDEO · VFX · 2011—2023</div>
+        <div class="desc" data-i18n="work.p3.desc">Efeitos visuais e pós-produção para clientes da produtora Greenpixel.</div>
+      </div>
+      <div class="project">
+        <div class="thumb"></div>
+        <div class="num">04 / PROJETO PESSOAL</div>
+        <div class="title" data-i18n="work.p4.title">Identidade visual</div>
+        <div class="tags">ILLUSTRATOR · BRANDING</div>
+        <div class="desc" data-i18n="work.p4.desc">Espaço reservado — adicione seu projeto de marca ou identidade visual favorito.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     EXPERIÊNCIA — timeline
+     ============================================================ -->
+<section id="experience">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="exp.eyebrow">TRAJETÓRIA</div>
+    <h2 data-i18n="exp.title">Experiência profissional</h2>
+    <div class="timeline">
+      <div class="tl-item current">
+        <div class="when" data-i18n="exp.i1.when">MAIO 2024 — ATUAL</div>
+        <h3 data-i18n="exp.i1.role">Designer Gráfico</h3>
+        <div class="org">Sintegra Surgical Sciences — Marketing</div>
+        <p data-i18n="exp.i1.desc">Design gráfico, identidade visual e motion graphics para marketing médico-hospitalar; organização e cobertura de eventos, montagem de estandes; produção de vídeos 3D de técnicas cirúrgicas.</p>
+      </div>
+      <div class="tl-item">
+        <div class="when">2018 — 2021</div>
+        <h3 data-i18n="exp.i2.role">Piloto de Drones &amp; Fotógrafo</h3>
+        <div class="org">Guaradrones (M.E.I.)</div>
+        <p data-i18n="exp.i2.desc">Captação aérea, mapeamento e fotogrametria com linha DJI, regulamentação ANAC e elaboração de peças gráficas.</p>
+      </div>
+      <div class="tl-item">
+        <div class="when">2018 — 2021</div>
+        <h3 data-i18n="exp.i3.role">Professor de Áudio Visual, Informática e Inclusão Digital</h3>
+        <div class="org">Prefeitura Municipal de Guararema</div>
+        <p data-i18n="exp.i3.desc">Planejamento e execução de cursos de tecnologia, edição de vídeo e desenvolvimento de jogos para jovens, idosos e profissionais em formação.</p>
+      </div>
+      <div class="tl-item">
+        <div class="when">2011 — 2023</div>
+        <h3 data-i18n="exp.i4.role">Fotógrafo e Videomaker</h3>
+        <div class="org">Greenpixel — Produtora</div>
+        <p data-i18n="exp.i4.desc">Captação, edição, VFX e pilotagem de drones para produções da Greenpixel.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SKILLS
+     ============================================================ -->
+<section id="skills">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="skills.eyebrow">FERRAMENTAS &amp; COMPETÊNCIAS</div>
+    <h2 data-i18n="skills.title">Como eu trabalho</h2>
+    <div class="skillgrid">
+      <div class="cell hi"><h4>Blender</h4><span data-i18n="skills.blender">Desde o lançamento</span></div>
+      <div class="cell"><h4>Adobe CC</h4><span>AI · PS · AE · PR · ID · XD</span></div>
+      <div class="cell"><h4>Unity / Unreal</h4><span data-i18n="skills.game">Engines &amp; interatividade</span></div>
+      <div class="cell"><h4>Substance Painter</h4><span data-i18n="skills.tex">Texturização 3D</span></div>
+      <div class="cell"><h4>DJI / VANT</h4><span data-i18n="skills.drone">Drones &amp; mapeamento aéreo</span></div>
+      <div class="cell"><h4 data-i18n="skills.dev.title">Programação</h4><span>JS · Node · PHP · C# · Python · SQL</span></div>
+      <div class="cell"><h4 data-i18n="skills.social.title">Mídias Sociais</h4><span data-i18n="skills.social">Planejamento &amp; conteúdo</span></div>
+      <div class="cell"><h4 data-i18n="skills.teach.title">Didática</h4><span data-i18n="skills.teach">Cursos &amp; treinamentos</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     IDIOMAS + FORMAÇÃO
+     ============================================================ -->
+<section id="lang-edu">
+  <div class="wrap cols2">
+    <div>
+      <h3 data-i18n="lang.title">Idiomas</h3>
+      <div class="langrow"><span>Inglês</span><span class="lvl" data-i18n="lang.en">Fluente</span></div>
+      <div class="langrow"><span>Espanhol</span><span class="lvl" data-i18n="lang.es">Intermediário</span></div>
+      <div class="langrow"><span>Italiano</span><span class="lvl" data-i18n="lang.it">Em andamento</span></div>
+      <div class="langrow"><span>Alemão</span><span class="lvl" data-i18n="lang.de">Em andamento</span></div>
+    </div>
+    <div>
+      <h3 data-i18n="edu.title">Formação</h3>
+      <div class="edurow"><b data-i18n="edu.d1">Design Gráfico</b><span data-i18n="edu.d1sub">Anhembi Morumbi · previsão 2028</span></div>
+      <div class="edurow"><b data-i18n="edu.d2">Marketing Digital</b><span data-i18n="edu.d2sub">Previsão 2028</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTATO
+     ============================================================ -->
+<section id="contact">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="contact.eyebrow">PRÓXIMO CORTE</div>
+    <h2><a href="mailto:gustavo.v.aguiar@outlook.com" data-i18n="contact.title">Vamos criar<br>algo juntos</a></h2>
+    <div class="row">
+      <a href="mailto:gustavo.v.aguiar@outlook.com">gustavo.v.aguiar@outlook.com</a>
+      <a href="tel:+5511974270046">+55 (11) 97427-0046</a>
+      <span data-i18n="contact.loc">Marília — SP, Brasil · disponível para viagens</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© <span id="year"></span> Gustavo Vecchiatti Aguiar</span>
+  <span data-i18n="footer.made">Feito com HTML, CSS &amp; café</span>
+</footer>
+
+<script>
+/* ============================================================
+   TRANSLATIONS
+   ============================================================ */
+const i18n = {
+  pt: {
+    "scrubber.rec":"REC",
+    "hero.kicker":"PORTFÓLIO — DESIGN / MOTION / 3D",
+    "hero.role":'Designer gráfico e <strong>motion designer</strong> com mais de 10 anos transformando ideias complexas — cirurgias, marcas, produtos — em imagens que qualquer pessoa entende.',
+    "hero.meta1.label":"BASEADO EM","hero.meta1.value":"Marília, SP — Brasil",
+    "hero.meta2.label":"ATUANDO EM","hero.meta2.value":"Design de Saúde & Tecnologia",
+    "hero.meta3.label":"FERRAMENTA-ASSINATURA",
+    "hero.scroll":"ROLE PARA COMEÇAR",
+    "about.eyebrow":"SOBRE MIM",
+    "about.title":"De pilotar drones a modelar cirurgias em 3D",
+    "about.portraitPlaceholder":"[ Adicione aqui uma foto sua em<br>assets/images/portrait.jpg ]",
+    "about.p1":"Comecei filmando por paixão — um drone, uma câmera, a curiosidade de entender como uma imagem consegue contar uma história inteira em segundos. O que era hobby virou ofício: passei a editar vídeos, fotografar eventos e, pouco a pouco, a desenhar as peças gráficas que antes eu só admirava em outros trabalhos.",
+    "about.pull":'"Aprendi Blender no lançamento, quando praticamente ninguém acreditava em software livre para produção profissional. Hoje uso essa mesma ferramenta open source para dar vida a técnicas cirúrgicas em 3D — a prova de que ferramenta gratuita não é sinônimo de resultado amador."',
+    "about.p2":"Também dei aulas — de informática, de edição, de programação de jogos — para adolescentes, idosos e profissionais em formação. Ensinar me ensinou a simplificar o complexo, uma habilidade que uso todos os dias na Sintegra Surgical Sciences, traduzindo procedimentos cirúrgicos densos em vídeos e materiais que médicos, pacientes e equipes de marketing entendem de imediato.",
+    "about.p3":"Hoje meu trabalho fica na interseção entre estética e clareza: design que comunica, motion que explica, 3D que aproxima o invisível do visível. E enquanto sigo aprendendo — cursando Design Gráfico e Marketing Digital, arriscando frases em italiano e alemão — continuo acreditando que a melhor ferramenta é a que te deixa mais perto de contar a história certa.",
+    "about.fact1":"Anos de experiência","about.fact2":"Anos, brasileiro","about.fact3":"Idiomas em uso/estudo",
+    "work.eyebrow":"PORTFÓLIO SELECIONADO","work.title":"Trabalhos recentes",
+    "work.lead":"Substitua os blocos abaixo por imagens, GIFs ou vídeos reais dos projetos — a estrutura já está pronta para receber seu material.",
+    "work.p1.title":"Técnicas cirúrgicas em 3D","work.p1.desc":"Animações 3D de procedimentos cirúrgicos para comunicação científica e treinamento médico.",
+    "work.p2.title":"Mapeamento aéreo","work.p2.desc":"Captação e mapeamento aéreo com toda a linha DJI, do pequeno ao grande porte.",
+    "work.p3.title":"VFX & pós-produção","work.p3.desc":"Efeitos visuais e pós-produção para clientes da produtora Greenpixel.",
+    "work.p4.title":"Identidade visual","work.p4.desc":"Espaço reservado — adicione seu projeto de marca ou identidade visual favorito.",
+    "exp.eyebrow":"TRAJETÓRIA","exp.title":"Experiência profissional",
+    "exp.i1.when":"MAIO 2024 — ATUAL","exp.i1.role":"Designer Gráfico",
+    "exp.i1.desc":"Design gráfico, identidade visual e motion graphics para marketing médico-hospitalar; organização e cobertura de eventos, montagem de estandes; produção de vídeos 3D de técnicas cirúrgicas.",
+    "exp.i2.role":"Piloto de Drones & Fotógrafo","exp.i2.desc":"Captação aérea, mapeamento e fotogrametria com linha DJI, regulamentação ANAC e elaboração de peças gráficas.",
+    "exp.i3.role":"Professor de Áudio Visual, Informática e Inclusão Digital","exp.i3.desc":"Planejamento e execução de cursos de tecnologia, edição de vídeo e desenvolvimento de jogos para jovens, idosos e profissionais em formação.",
+    "exp.i4.role":"Fotógrafo e Videomaker","exp.i4.desc":"Captação, edição, VFX e pilotagem de drones para produções da Greenpixel.",
+    "skills.eyebrow":"FERRAMENTAS & COMPETÊNCIAS","skills.title":"Como eu trabalho",
+    "skills.blender":"Desde o lançamento","skills.game":"Engines & interatividade","skills.tex":"Texturização 3D",
+    "skills.drone":"Drones & mapeamento aéreo","skills.dev.title":"Programação","skills.social.title":"Mídias Sociais",
+    "skills.social":"Planejamento & conteúdo","skills.teach.title":"Didática","skills.teach":"Cursos & treinamentos",
+    "lang.title":"Idiomas","lang.en":"Fluente","lang.es":"Intermediário","lang.it":"Em andamento","lang.de":"Em andamento",
+    "edu.title":"Formação","edu.d1":"Design Gráfico","edu.d1sub":"Anhembi Morumbi · previsão 2028",
+    "edu.d2":"Marketing Digital","edu.d2sub":"Previsão 2028",
+    "contact.eyebrow":"PRÓXIMO CORTE","contact.title":"Vamos criar<br>algo juntos",
+    "contact.loc":"Marília — SP, Brasil · disponível para viagens",
+    "footer.made":"Feito com HTML, CSS & café"
+  },
+  en: {
+    "scrubber.rec":"REC",
+    "hero.kicker":"PORTFOLIO — DESIGN / MOTION / 3D",
+    "hero.role":'Graphic designer and <strong>motion designer</strong> with 10+ years turning complex ideas — surgeries, brands, products — into images anyone can understand.',
+    "hero.meta1.label":"BASED IN","hero.meta1.value":"Marília, SP — Brazil",
+    "hero.meta2.label":"WORKING IN","hero.meta2.value":"Health & Tech Design",
+    "hero.meta3.label":"SIGNATURE TOOL",
+    "hero.scroll":"SCROLL TO START",
+    "about.eyebrow":"ABOUT ME",
+    "about.title":"From flying drones to modeling surgeries in 3D",
+    "about.portraitPlaceholder":"[ Add your photo here at<br>assets/images/portrait.jpg ]",
+    "about.p1":"I started filming out of pure curiosity — a drone, a camera, and the itch to understand how a single image can tell a whole story in seconds. What began as a hobby became a craft: editing video, shooting events, and slowly learning to design the graphics I once only admired in other people's work.",
+    "about.pull":'"I learned Blender at launch, back when almost no one believed free software could handle professional production. Today I use that same open-source tool to bring surgical techniques to life in 3D — proof that free doesn\'t mean amateur."',
+    "about.p2":"I also taught — computing, editing, game development — to teenagers, seniors, and professionals in training. Teaching taught me to simplify the complex, a skill I use every day at Sintegra Surgical Sciences, turning dense surgical procedures into videos and materials that doctors, patients, and marketing teams instantly understand.",
+    "about.p3":"Today my work sits at the intersection of aesthetics and clarity: design that communicates, motion that explains, 3D that brings the invisible closer. And while I keep learning — studying Graphic Design and Digital Marketing, risking sentences in Italian and German — I still believe the best tool is whichever one gets you closer to telling the right story.",
+    "about.fact1":"Years of experience","about.fact2":"Years old, Brazilian","about.fact3":"Languages spoken/learning",
+    "work.eyebrow":"SELECTED WORK","work.title":"Recent projects",
+    "work.lead":"Swap the blocks below for real images, GIFs or videos of your projects — the structure is ready for your material.",
+    "work.p1.title":"3D surgical techniques","work.p1.desc":"3D animations of surgical procedures for scientific communication and medical training.",
+    "work.p2.title":"Aerial mapping","work.p2.desc":"Aerial capture and mapping using the full DJI line, from small to large scale.",
+    "work.p3.title":"VFX & post-production","work.p3.desc":"Visual effects and post-production for Greenpixel's clients.",
+    "work.p4.title":"Visual identity","work.p4.desc":"Reserved slot — add your favorite branding or identity project here.",
+    "exp.eyebrow":"TRAJECTORY","exp.title":"Professional experience",
+    "exp.i1.when":"MAY 2024 — PRESENT","exp.i1.role":"Graphic Designer",
+    "exp.i1.desc":"Graphic design, visual identity and motion graphics for medical/hospital marketing; event organization and coverage, booth setup; 3D video production of surgical techniques.",
+    "exp.i2.role":"Drone Pilot & Photographer","exp.i2.desc":"Aerial capture, mapping and photogrammetry with the DJI line, ANAC regulation compliance, and graphic design.",
+    "exp.i3.role":"Audiovisual, IT & Digital Inclusion Instructor","exp.i3.desc":"Planning and running technology, video editing and game development courses for teens, seniors and professionals in training.",
+    "exp.i4.role":"Photographer and Videomaker","exp.i4.desc":"Capture, editing, VFX and drone piloting for Greenpixel productions.",
+    "skills.eyebrow":"TOOLS & SKILLS","skills.title":"How I work",
+    "skills.blender":"Since launch","skills.game":"Engines & interactivity","skills.tex":"3D texturing",
+    "skills.drone":"Drones & aerial mapping","skills.dev.title":"Programming","skills.social.title":"Social Media",
+    "skills.social":"Planning & content","skills.teach.title":"Teaching","skills.teach":"Courses & training",
+    "lang.title":"Languages","lang.en":"Fluent","lang.es":"Intermediate","lang.it":"Learning","lang.de":"Learning",
+    "edu.title":"Education","edu.d1":"Graphic Design","edu.d1sub":"Anhembi Morumbi · expected 2028",
+    "edu.d2":"Digital Marketing","edu.d2sub":"Expected 2028",
+    "contact.eyebrow":"NEXT CUT","contact.title":"Let's create<br>something together",
+    "contact.loc":"Marília — SP, Brazil · available for travel",
+    "footer.made":"Made with HTML, CSS & coffee"
+  }
+};
+
+function setLang(lang){
+  document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(i18n[lang][key] !== undefined){ el.innerHTML = i18n[lang][key]; }
+  });
+  document.querySelectorAll('.langtoggle button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+  localStorage.setItem('gva-lang', lang);
+}
+document.querySelectorAll('.langtoggle button').forEach(b=>{
+  b.addEventListener('click', ()=> setLang(b.dataset.lang));
+});
+setLang(localStorage.getItem('gva-lang') || 'pt');
+
+/* ============================================================
+   SCRUBBER — scroll progress + fake timecode + nav dots
+   ============================================================ */
+const sections = document.querySelectorAll('section');
+const heads = document.getElementById('scrubber-heads');
+sections.forEach(()=>{ const s=document.createElement('span'); heads.appendChild(s); });
+const fill = document.getElementById('scrubber-fill');
+const codeEl = document.getElementById('scrubber-code');
+const navdots = document.querySelectorAll('#navdots a');
+
+function fmt(n){return String(n).padStart(2,'0');}
+
+function onScroll(){
+  const scrollTop = window.scrollY;
+  const docHeight = document.body.scrollHeight - window.innerHeight;
+  const pct = Math.min(1, Math.max(0, scrollTop / docHeight));
+  fill.style.width = (pct*100)+'%';
+
+  const totalFrames = Math.floor(pct * 100 * 24 / 100 * 100); // stylised, not literal
+  const totalSeconds = Math.floor(pct * 300);
+  const mm = Math.floor(totalSeconds/60), ss = totalSeconds%60, ff = Math.floor((pct*100)%24);
+  codeEl.textContent = `${fmt(mm)}:${fmt(ss)}:${fmt(ff)}:00`;
+
+  // parallax words
+  document.querySelectorAll('.parallax-field .word').forEach(w=>{
+    const speed = parseFloat(w.dataset.speed);
+    w.style.transform = `translateY(${scrollTop*speed}px)`;
+  });
+}
+window.addEventListener('scroll', onScroll, {passive:true});
+onScroll();
+
+/* reveal on intersect */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('in');
+      const idx = [...sections].indexOf(e.target.closest('section'));
+      if(idx>-1){ navdots.forEach(d=>d.classList.remove('active')); navdots[idx]?.classList.add('active'); }
+    }
+  });
+},{threshold:0.2});
+
+document.querySelectorAll('#about, #work .project, #experience .tl-item, #skills .cell, #contact .wrap').forEach(el=>{
+  el.classList.add('reveal'); io.observe(el);
+});
+
+/* also mark section as reveal target for nav dot tracking even without reveal class */
+sections.forEach(sec=>io.observe(sec));
+
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
