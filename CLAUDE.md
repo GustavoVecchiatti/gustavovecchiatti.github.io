@@ -63,6 +63,7 @@ Todos os blocos `.thumb` (cards de projeto) e `.portrait` (foto do Sobre) são a
 - [ ] Adicionar favicon
 - [ ] Revisar/ajustar copy do "Sobre" se o usuário pedir um tom diferente
 - [ ] Opcional: 3D interativo (ex: Three.js + export `.glb` do Blender) na seção de skills, se o usuário quiser elevar ainda mais o "impacto" do site
+- [ ] **Decidir o tema final** entre as 4 versões do `#style-switcher` (barra flutuante temporária, 2026-08-19) e então: aplicar as cores/fontes escolhidas como novo `:root` padrão e remover o bloco do seletor (HTML + CSS `#style-switcher`/`.theme-*` + o IIFE correspondente no JS)
 
 ## O que NÃO fazer sem confirmar com o usuário
 
