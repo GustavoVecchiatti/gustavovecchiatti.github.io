@@ -254,20 +254,16 @@ h1,h2,h3{font-family:var(--font-display); font-weight:700; letter-spacing:-.02em
 .projects{display:grid; grid-template-columns:repeat(2,1fr); gap:2px; background:var(--line); border:1px solid var(--line);}
 @media (max-width:760px){ .projects{grid-template-columns:1fr;} }
 .project{
-  background:var(--paper); padding:34px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between;
-  position:relative; overflow:hidden;
+  background:var(--paper); padding:34px; display:flex; flex-direction:column;
 }
-.project .thumb{
-  position:absolute; inset:0; z-index:0;
-  background:linear-gradient(155deg,var(--paper-dim) 0%, #eceade 100%);
-  transform:scale(1.0); transition:transform .7s var(--wipe);
+.project .media{
+  position:relative; aspect-ratio:16/9; background:#111; margin:-34px -34px 26px; overflow:hidden;
 }
-.project:hover .thumb{transform:scale(1.06);}
-.project .num, .project .title, .project .tags{position:relative; z-index:1;}
+.project .media iframe{position:absolute; inset:0; width:100%; height:100%; border:0;}
 .project .num{font-family:var(--font-mono); font-size:12px; color:var(--gray);}
-.project .title{font-size:clamp(22px,2.4vw,30px); font-weight:700; margin-top:130px;}
+.project .title{font-size:clamp(22px,2.4vw,30px); font-weight:700; margin-top:10px;}
 .project .tags{margin-top:14px; font-family:var(--font-mono); font-size:11px; color:var(--gray); letter-spacing:.03em;}
-.project .desc{position:relative; z-index:1; margin-top:12px; font-size:14px; color:var(--gray); max-width:420px;}
+.project .desc{margin-top:12px; font-size:14px; color:var(--gray); max-width:420px;}
 
 /* ============================================================
    SKILLS grid
@@ -406,35 +402,43 @@ footer{
   <div class="wrap">
     <div class="eyebrow" data-i18n="work.eyebrow">PORTFÓLIO SELECIONADO</div>
     <h2 data-i18n="work.title">Trabalhos recentes</h2>
-    <p class="lead" data-i18n="work.lead">Substitua os blocos abaixo por imagens, GIFs ou vídeos reais dos projetos — a estrutura já está pronta para receber seu material.</p>
+    <p class="lead" data-i18n="work.lead">Uma seleção de vídeos reais de motion e 3D produzidos para o setor de saúde.</p>
     <div class="projects">
       <div class="project">
-        <div class="thumb"></div>
+        <div class="media">
+          <iframe src="https://www.youtube.com/embed/tpNmydQ_sKU?rel=0&amp;modestbranding=1" title="Features FitlockRSC — Sintegra Surgical" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
         <div class="num">01 / SINTEGRA SURGICAL SCIENCES</div>
-        <div class="title" data-i18n="work.p1.title">Técnicas cirúrgicas em 3D</div>
-        <div class="tags">BLENDER · MOTION GRAPHICS · 2024—</div>
-        <div class="desc" data-i18n="work.p1.desc">Animações 3D de procedimentos cirúrgicos para comunicação científica e treinamento médico.</div>
+        <div class="title" data-i18n="work.p1.title">FitlockRSC — Recursos do produto</div>
+        <div class="tags">BLENDER · MOTION GRAPHICS</div>
+        <div class="desc" data-i18n="work.p1.desc">Vídeo de apresentação dos recursos do implante FitlockRSC, com animação 3D explicando o funcionamento técnico do produto.</div>
       </div>
       <div class="project">
-        <div class="thumb"></div>
-        <div class="num">02 / GUARADRONES</div>
-        <div class="title" data-i18n="work.p2.title">Mapeamento aéreo</div>
-        <div class="tags">DRONE · FOTOGRAFIA · 2018—2021</div>
-        <div class="desc" data-i18n="work.p2.desc">Captação e mapeamento aéreo com toda a linha DJI, do pequeno ao grande porte.</div>
+        <div class="media">
+          <iframe src="https://www.youtube.com/embed/SNMTyCqU3Nk?rel=0&amp;modestbranding=1" title="Features Precision MR — Hydrumedical Portugal" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="num">02 / HYDRUMEDICAL PORTUGAL</div>
+        <div class="title" data-i18n="work.p2.title">Precision MR — Recursos do produto</div>
+        <div class="tags">BLENDER · MOTION GRAPHICS</div>
+        <div class="desc" data-i18n="work.p2.desc">Vídeo de apresentação do suturador de menisco Precision MR, com foco em clareza funcional para o mercado português.</div>
       </div>
       <div class="project">
-        <div class="thumb"></div>
-        <div class="num">03 / GREENPIXEL</div>
-        <div class="title" data-i18n="work.p3.title">VFX &amp; pós-produção</div>
-        <div class="tags">VÍDEO · VFX · 2011—2023</div>
-        <div class="desc" data-i18n="work.p3.desc">Efeitos visuais e pós-produção para clientes da produtora Greenpixel.</div>
+        <div class="media">
+          <iframe src="https://www.youtube.com/embed/YJYC6pXy1YY?rel=0&amp;modestbranding=1" title="ShortFolio — Sintegra" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="num">03 / SINTEGRA SURGICAL SCIENCES</div>
+        <div class="title" data-i18n="work.p3.title">ShortFolio — Campanha</div>
+        <div class="tags">MOTION GRAPHICS · EDIÇÃO</div>
+        <div class="desc" data-i18n="work.p3.desc">Compilação em vídeo de destaques de projetos e campanhas produzidas para a Sintegra Surgical Sciences.</div>
       </div>
       <div class="project">
-        <div class="thumb"></div>
-        <div class="num">04 / PROJETO PESSOAL</div>
-        <div class="title" data-i18n="work.p4.title">Identidade visual</div>
-        <div class="tags">ILLUSTRATOR · BRANDING</div>
-        <div class="desc" data-i18n="work.p4.desc">Espaço reservado — adicione seu projeto de marca ou identidade visual favorito.</div>
+        <div class="media">
+          <iframe src="https://www.youtube.com/embed/idD1vAX8bRM?rel=0&amp;modestbranding=1" title="Save the Date — CBOO 2026" loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="num">04 / GF IMPLANTES &amp; SINTEGRA</div>
+        <div class="title" data-i18n="work.p4.title">Save the Date — CBOO 2026</div>
+        <div class="tags">MOTION GRAPHICS · EVENTO</div>
+        <div class="desc" data-i18n="work.p4.desc">Peça animada de save-the-date para o congresso CBOO 2026, produzida em parceria entre GF Implantes e Sintegra.</div>
       </div>
     </div>
   </div>
@@ -501,11 +505,11 @@ const i18n = {
     "about.p3":"Hoje meu trabalho fica na interseção entre estética e clareza: design que comunica, motion que explica, 3D que aproxima o invisível do visível. E enquanto sigo aprendendo — cursando Design Gráfico e Marketing Digital, arriscando frases em italiano e alemão — continuo acreditando que a melhor ferramenta é a que te deixa mais perto de contar a história certa.",
     "about.fact1":"Anos de experiência","about.fact2":"Anos, brasileiro","about.fact3":"Idiomas em uso/estudo",
     "work.eyebrow":"PORTFÓLIO SELECIONADO","work.title":"Trabalhos recentes",
-    "work.lead":"Substitua os blocos abaixo por imagens, GIFs ou vídeos reais dos projetos — a estrutura já está pronta para receber seu material.",
-    "work.p1.title":"Técnicas cirúrgicas em 3D","work.p1.desc":"Animações 3D de procedimentos cirúrgicos para comunicação científica e treinamento médico.",
-    "work.p2.title":"Mapeamento aéreo","work.p2.desc":"Captação e mapeamento aéreo com toda a linha DJI, do pequeno ao grande porte.",
-    "work.p3.title":"VFX & pós-produção","work.p3.desc":"Efeitos visuais e pós-produção para clientes da produtora Greenpixel.",
-    "work.p4.title":"Identidade visual","work.p4.desc":"Espaço reservado — adicione seu projeto de marca ou identidade visual favorito.",
+    "work.lead":"Uma seleção de vídeos reais de motion e 3D produzidos para o setor de saúde.",
+    "work.p1.title":"FitlockRSC — Recursos do produto","work.p1.desc":"Vídeo de apresentação dos recursos do implante FitlockRSC, com animação 3D explicando o funcionamento técnico do produto.",
+    "work.p2.title":"Precision MR — Recursos do produto","work.p2.desc":"Vídeo de apresentação do suturador de menisco Precision MR, com foco em clareza funcional para o mercado português.",
+    "work.p3.title":"ShortFolio — Campanha","work.p3.desc":"Compilação em vídeo de destaques de projetos e campanhas produzidas para a Sintegra Surgical Sciences.",
+    "work.p4.title":"Save the Date — CBOO 2026","work.p4.desc":"Peça animada de save-the-date para o congresso CBOO 2026, produzida em parceria entre GF Implantes e Sintegra.",
     "skills.eyebrow":"FERRAMENTAS & COMPETÊNCIAS","skills.title":"Como eu trabalho",
     "skills.blender":"Desde o lançamento","skills.game":"Engines & interatividade","skills.tex":"Texturização 3D",
     "skills.drone":"Drones & mapeamento aéreo","skills.dev.title":"Programação","skills.social.title":"Mídias Sociais",
@@ -530,11 +534,11 @@ const i18n = {
     "about.p3":"Today my work sits at the intersection of aesthetics and clarity: design that communicates, motion that explains, 3D that brings the invisible closer. And while I keep learning — studying Graphic Design and Digital Marketing, risking sentences in Italian and German — I still believe the best tool is whichever one gets you closer to telling the right story.",
     "about.fact1":"Years of experience","about.fact2":"Years old, Brazilian","about.fact3":"Languages spoken/learning",
     "work.eyebrow":"SELECTED WORK","work.title":"Recent projects",
-    "work.lead":"Swap the blocks below for real images, GIFs or videos of your projects — the structure is ready for your material.",
-    "work.p1.title":"3D surgical techniques","work.p1.desc":"3D animations of surgical procedures for scientific communication and medical training.",
-    "work.p2.title":"Aerial mapping","work.p2.desc":"Aerial capture and mapping using the full DJI line, from small to large scale.",
-    "work.p3.title":"VFX & post-production","work.p3.desc":"Visual effects and post-production for Greenpixel's clients.",
-    "work.p4.title":"Visual identity","work.p4.desc":"Reserved slot — add your favorite branding or identity project here.",
+    "work.lead":"A selection of real motion and 3D videos produced for the healthcare industry.",
+    "work.p1.title":"FitlockRSC — Product features","work.p1.desc":"Feature walkthrough for the FitlockRSC implant, with 3D animation explaining the product's technical function.",
+    "work.p2.title":"Precision MR — Product features","work.p2.desc":"Feature walkthrough for the Precision MR meniscus repair device, focused on functional clarity for the Portuguese market.",
+    "work.p3.title":"ShortFolio — Campaign","work.p3.desc":"Video compilation of highlights from projects and campaigns produced for Sintegra Surgical Sciences.",
+    "work.p4.title":"Save the Date — CBOO 2026","work.p4.desc":"Animated save-the-date piece for the CBOO 2026 congress, produced in partnership between GF Implantes and Sintegra.",
     "skills.eyebrow":"TOOLS & SKILLS","skills.title":"How I work",
     "skills.blender":"Since launch","skills.game":"Engines & interactivity","skills.tex":"3D texturing",
     "skills.drone":"Drones & aerial mapping","skills.dev.title":"Programming","skills.social.title":"Social Media",
