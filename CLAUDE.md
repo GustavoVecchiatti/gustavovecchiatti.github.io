@@ -54,7 +54,7 @@ Todos os blocos `.thumb` (cards de projeto) e `.portrait` (foto do Sobre) são a
 
 - CSS organizado em blocos comentados por seção (`/* === HERO === */` etc.) — manter esse padrão ao adicionar CSS novo.
 - Motion/animação: usar `IntersectionObserver` para reveals on-scroll (já existe um `io` configurado) em vez de bibliotecas externas.
-- Respeitar `prefers-reduced-motion` — qualquer animação nova deve ser desativada nesse media query.
+- **Não usar `prefers-reduced-motion`** para desativar animações — decisão explícita do usuário (2026-08-19): o site deve sempre animar (REC pulsante, faixa de skills etc.), mesmo para quem tem "reduzir animações" ativado no sistema.
 - Mobile-first: sempre testar/ajustar breakpoints em `max-width: 720px–900px`.
 
 ## Tarefas pendentes conhecidas (backlog)
