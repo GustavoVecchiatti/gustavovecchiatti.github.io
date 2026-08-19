@@ -209,10 +209,8 @@ h1,h2,h3{font-family:var(--font-display); font-weight:700; letter-spacing:-.02em
 }
 @media (max-width:860px){ #about .cols{grid-template-columns:1fr; gap:36px;} }
 #about .portrait{
-  aspect-ratio:4/5; background:linear-gradient(155deg,var(--paper-dim),#e6e4da);
+  aspect-ratio:4/5; background:url('assets/images/portrait.jpg') center/cover;
   border:1px solid var(--line);
-  display:flex; align-items:center; justify-content:center;
-  font-family:var(--font-mono); font-size:11px; color:var(--gray); text-align:center; padding:20px;
   position:sticky; top:70px;
 }
 #about h2{font-size:clamp(30px,4vw,46px); margin-bottom:30px;}
@@ -364,7 +362,7 @@ footer{
      ============================================================ -->
 <section id="about">
   <div class="wrap cols">
-    <div class="portrait" data-i18n="about.portraitPlaceholder">[ Adicione aqui uma foto sua em<br>assets/images/portrait.jpg ]</div>
+    <div class="portrait"></div>
     <div>
       <div class="eyebrow" data-i18n="about.eyebrow">SOBRE MIM</div>
       <h2 data-i18n="about.title">De pilotar drones a modelar cirurgias em 3D</h2>
@@ -497,7 +495,6 @@ const i18n = {
     "hero.scroll":"ROLE PARA COMEÇAR",
     "about.eyebrow":"SOBRE MIM",
     "about.title":"De pilotar drones a modelar cirurgias em 3D",
-    "about.portraitPlaceholder":"[ Adicione aqui uma foto sua em<br>assets/images/portrait.jpg ]",
     "about.p1":"Comecei filmando por paixão — um drone, uma câmera, a curiosidade de entender como uma imagem consegue contar uma história inteira em segundos. O que era hobby virou ofício: passei a editar vídeos, fotografar eventos e, pouco a pouco, a desenhar as peças gráficas que antes eu só admirava em outros trabalhos.",
     "about.pull":'"Aprendi Blender no lançamento, quando praticamente ninguém acreditava em software livre para produção profissional. Hoje uso essa mesma ferramenta open source para dar vida a técnicas cirúrgicas em 3D — a prova de que ferramenta gratuita não é sinônimo de resultado amador."',
     "about.p2":"Também dei aulas — de informática, de edição, de programação de jogos — para adolescentes, idosos e profissionais em formação. Ensinar me ensinou a simplificar o complexo, uma habilidade que uso todos os dias na Sintegra Surgical Sciences, traduzindo procedimentos cirúrgicos densos em vídeos e materiais que médicos, pacientes e equipes de marketing entendem de imediato.",
@@ -527,7 +524,6 @@ const i18n = {
     "hero.scroll":"SCROLL TO START",
     "about.eyebrow":"ABOUT ME",
     "about.title":"From flying drones to modeling surgeries in 3D",
-    "about.portraitPlaceholder":"[ Add your photo here at<br>assets/images/portrait.jpg ]",
     "about.p1":"I started filming out of pure curiosity — a drone, a camera, and the itch to understand how a single image can tell a whole story in seconds. What began as a hobby became a craft: editing video, shooting events, and slowly learning to design the graphics I once only admired in other people's work.",
     "about.pull":'"I learned Blender at launch, back when almost no one believed free software could handle professional production. Today I use that same open-source tool to bring surgical techniques to life in 3D — proof that free doesn\'t mean amateur."',
     "about.p2":"I also taught — computing, editing, game development — to teenagers, seniors, and professionals in training. Teaching taught me to simplify the complex, a skill I use every day at Sintegra Surgical Sciences, turning dense surgical procedures into videos and materials that doctors, patients, and marketing teams instantly understand.",
