@@ -244,7 +244,7 @@ h1,h2,h3{font-family:var(--font-display); font-weight:700; letter-spacing:-.02em
   padding:26px 0;
 }
 .marquee:nth-child(2){border-top:none;}
-.marquee .track{display:flex; animation:scroll 42s linear infinite;}
+.marquee .track{display:flex; animation:scroll 110s linear infinite; will-change:transform;}
 .marquee.rev .track{animation-direction:reverse;}
 .marquee span{
   font-family:var(--font-display); font-weight:600; font-size:clamp(26px,4vw,46px);
@@ -307,16 +307,6 @@ h1,h2,h3{font-family:var(--font-display); font-weight:700; letter-spacing:-.02em
 .skillgrid .cell span{font-family:var(--font-mono); font-size:10.5px; color:var(--gray); text-transform:uppercase; letter-spacing:.04em;}
 .skillgrid .cell.hi{background:var(--ink); color:var(--paper);}
 .skillgrid .cell.hi span{color:#b8b6ac;}
-
-/* langs + education mini section */
-#lang-edu .cols2{display:grid; grid-template-columns:1fr 1fr; gap:60px;}
-@media (max-width:720px){ #lang-edu .cols2{grid-template-columns:1fr; gap:40px;} }
-#lang-edu h3{font-size:14px; font-family:var(--font-mono); text-transform:uppercase; letter-spacing:.08em; color:var(--gray); margin-bottom:22px;}
-.langrow{display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-bottom:1px solid var(--line); font-size:16px;}
-.langrow .lvl{font-family:var(--font-mono); font-size:11px; color:var(--gray);}
-.edurow{padding:14px 0; border-bottom:1px solid var(--line);}
-.edurow b{font-size:16px; display:block;}
-.edurow span{font-family:var(--font-mono); font-size:11px; color:var(--gray);}
 
 /* ============================================================
    CONTACT
@@ -535,26 +525,6 @@ footer{
 </section>
 
 <!-- ============================================================
-     IDIOMAS + FORMAÇÃO
-     ============================================================ -->
-<section id="lang-edu">
-  <div class="wrap cols2">
-    <div>
-      <h3 data-i18n="lang.title">Idiomas</h3>
-      <div class="langrow"><span>Inglês</span><span class="lvl" data-i18n="lang.en">Fluente</span></div>
-      <div class="langrow"><span>Espanhol</span><span class="lvl" data-i18n="lang.es">Intermediário</span></div>
-      <div class="langrow"><span>Italiano</span><span class="lvl" data-i18n="lang.it">Em andamento</span></div>
-      <div class="langrow"><span>Alemão</span><span class="lvl" data-i18n="lang.de">Em andamento</span></div>
-    </div>
-    <div>
-      <h3 data-i18n="edu.title">Formação</h3>
-      <div class="edurow"><b data-i18n="edu.d1">Design Gráfico</b><span data-i18n="edu.d1sub">Anhembi Morumbi · previsão 2028</span></div>
-      <div class="edurow"><b data-i18n="edu.d2">Marketing Digital</b><span data-i18n="edu.d2sub">Previsão 2028</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
      CONTATO
      ============================================================ -->
 <section id="contact">
@@ -611,9 +581,6 @@ const i18n = {
     "skills.blender":"Desde o lançamento","skills.game":"Engines & interatividade","skills.tex":"Texturização 3D",
     "skills.drone":"Drones & mapeamento aéreo","skills.dev.title":"Programação","skills.social.title":"Mídias Sociais",
     "skills.social":"Planejamento & conteúdo","skills.teach.title":"Didática","skills.teach":"Cursos & treinamentos",
-    "lang.title":"Idiomas","lang.en":"Fluente","lang.es":"Intermediário","lang.it":"Em andamento","lang.de":"Em andamento",
-    "edu.title":"Formação","edu.d1":"Design Gráfico","edu.d1sub":"Anhembi Morumbi · previsão 2028",
-    "edu.d2":"Marketing Digital","edu.d2sub":"Previsão 2028",
     "contact.eyebrow":"PRÓXIMO CORTE","contact.title":"Vamos criar<br>algo juntos",
     "contact.loc":"Marília — SP, Brasil · disponível para viagens",
     "footer.made":"Feito com HTML, CSS & café"
@@ -650,9 +617,6 @@ const i18n = {
     "skills.blender":"Since launch","skills.game":"Engines & interactivity","skills.tex":"3D texturing",
     "skills.drone":"Drones & aerial mapping","skills.dev.title":"Programming","skills.social.title":"Social Media",
     "skills.social":"Planning & content","skills.teach.title":"Teaching","skills.teach":"Courses & training",
-    "lang.title":"Languages","lang.en":"Fluent","lang.es":"Intermediate","lang.it":"Learning","lang.de":"Learning",
-    "edu.title":"Education","edu.d1":"Graphic Design","edu.d1sub":"Anhembi Morumbi · expected 2028",
-    "edu.d2":"Digital Marketing","edu.d2sub":"Expected 2028",
     "contact.eyebrow":"NEXT CUT","contact.title":"Let's create<br>something together",
     "contact.loc":"Marília — SP, Brazil · available for travel",
     "footer.made":"Made with HTML, CSS & coffee"
