@@ -22,55 +22,6 @@
    TOKENS
    ============================================================ */
 :root{
-  --paper:#faf9f6;
-  --paper-dim:#f0efe9;
-  --paper-rgb:250,249,246;
-  --ink:#121212;
-  --ink-soft:#2b2a26;
-  --gray:#6b6a63;
-  --line:#dcdad0;
-  --accent:#ff3b30;      /* rec red — signature accent */
-  --accent-2:#1e40ff;    /* cobalt — sparing use */
-  --muted-on-ink:#b8b6ac;
-  --font-display:'Space Grotesk', sans-serif;
-  --font-serif:'Newsreader', serif;
-  --font-mono:'IBM Plex Mono', monospace;
-  --wipe: cubic-bezier(.77,0,.18,1);
-  --grain-opacity:.05;
-}
-
-/* ============================================================
-   THEME VARIANTS — temporary switcher (see #style-switcher)
-   ============================================================ */
-html.theme-2{
-  /* "Blueprint" — cooler minimalist alt: white paper, cobalt as primary accent */
-  --paper:#ffffff;
-  --paper-dim:#f2f4f7;
-  --paper-rgb:255,255,255;
-  --ink:#0a0a0a;
-  --ink-soft:#26282c;
-  --gray:#70757e;
-  --line:#e2e5ea;
-  --accent:#1e40ff;
-  --accent-2:#ff3b30;
-  --muted-on-ink:#b9bfca;
-  --font-serif:'IBM Plex Mono', monospace;
-}
-html.theme-3{
-  /* "Cinema" — dramatic dark, signature red kept, film grain */
-  --paper:#0b0b0c;
-  --paper-dim:#151517;
-  --paper-rgb:11,11,12;
-  --ink:#f5f4f0;
-  --ink-soft:#cfcdc6;
-  --gray:#8b8a84;
-  --line:#2a2a2c;
-  --accent:#ff3b30;
-  --accent-2:#1e40ff;
-  --muted-on-ink:#55534c;
-  --grain-opacity:.07;
-}
-html.theme-4{
   /* "Obsidian" — quiet monochrome luxury, no color accent, no grain */
   --paper:#000000;
   --paper-dim:#0d0d0d;
@@ -82,9 +33,13 @@ html.theme-4{
   --accent:#f2ecd9;
   --accent-2:#9a9a9a;
   --muted-on-ink:#3a3a3a;
+  --font-display:'Space Grotesk', sans-serif;
+  --font-serif:'Newsreader', serif;
+  --font-mono:'IBM Plex Mono', monospace;
+  --wipe: cubic-bezier(.77,0,.18,1);
   --grain-opacity:0;
 }
-html.theme-4 ::selection{color:#000;}
+::selection{color:#000;}
 
 *{margin:0;padding:0;box-sizing:border-box;}
 *{transition:background-color .35s ease, border-color .35s ease, color .35s ease;}
@@ -192,34 +147,6 @@ h1,h2,h3{font-family:var(--font-display); font-weight:700; letter-spacing:-.02em
 }
 #navdots a.active{background:var(--ink); transform:scale(1.4);}
 @media (max-width:900px){ #navdots{display:none;} }
-
-/* ============================================================
-   STYLE SWITCHER — TEMPORÁRIO (remover junto com o bloco HTML/JS)
-   ============================================================ */
-#style-switcher{
-  position:fixed; left:50%; bottom:22px; transform:translateX(-50%); z-index:2000;
-  display:flex; align-items:center; gap:2px;
-  background:rgba(var(--paper-rgb),.94); backdrop-filter:blur(8px);
-  border:1px solid var(--line); border-radius:30px; padding:6px; padding-left:14px;
-  box-shadow:0 10px 34px rgba(0,0,0,.14);
-}
-#style-switcher .ss-label{
-  font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; color:var(--gray);
-  padding-right:12px; margin-right:4px; border-right:1px solid var(--line);
-}
-#style-switcher button{
-  font-family:var(--font-mono); font-size:11px; letter-spacing:.02em; background:none; border:none; border-radius:20px;
-  padding:8px 13px; cursor:pointer; color:var(--gray); white-space:nowrap; transition:background .25s, color .25s;
-}
-#style-switcher button:hover{color:var(--ink);}
-#style-switcher button.active{background:var(--ink); color:var(--paper);}
-#style-switcher #ss-close{padding:8px 11px; font-size:15px; margin-left:2px; color:var(--gray);}
-#style-switcher #ss-close:hover{color:var(--accent);}
-@media (max-width:640px){
-  #style-switcher{left:10px; right:10px; bottom:12px; transform:none; flex-wrap:wrap; justify-content:center; border-radius:16px; padding:8px;}
-  #style-switcher .ss-label{display:none;}
-  #style-switcher button{padding:7px 10px; font-size:10.5px;}
-}
 
 /* ============================================================
    HERO
@@ -402,8 +329,12 @@ h1,h2,h3{font-family:var(--font-display); font-weight:700; letter-spacing:-.02em
   font-size:clamp(38px,8vw,96px); line-height:.98; text-transform:uppercase;
 }
 #contact h2 a{
-  text-decoration:none; border-bottom:2px solid var(--accent);
+  text-decoration:none; display:block;
 }
+#contact h2 .line{
+  display:inline-block; border-bottom:2px solid var(--accent); padding-bottom:.08em;
+}
+#contact h2 .line + .line{ margin-top:.08em; }
 #contact .row{
   margin-top:60px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:30px;
   font-family:var(--font-mono); font-size:13px;
@@ -434,21 +365,6 @@ footer{
     <button data-lang="pt" class="active">PT</button>
     <button data-lang="en">EN</button>
   </div>
-</div>
-
-<!-- ============================================================
-     STYLE SWITCHER — TEMPORÁRIO
-     Ferramenta de comparação entre as 4 versões visuais. Remover
-     este bloco (HTML + CSS #style-switcher + JS correspondente)
-     quando o estilo final for escolhido.
-     ============================================================ -->
-<div id="style-switcher">
-  <span class="ss-label">ESTILO</span>
-  <button data-theme="theme-1" class="active">01 · Papel</button>
-  <button data-theme="theme-2">02 · Blueprint</button>
-  <button data-theme="theme-3">03 · Cinema</button>
-  <button data-theme="theme-4">04 · Obsidian</button>
-  <button id="ss-close" title="Ocultar seletor">×</button>
 </div>
 
 <nav id="navdots">
@@ -506,7 +422,7 @@ footer{
       <h2 data-i18n="about.title">De pilotar drones a modelar cirurgias em 3D</h2>
       <div class="story">
         <p data-i18n="about.p1">Comecei filmando por paixão — um drone, uma câmera, a curiosidade de entender como uma imagem consegue contar uma história inteira em segundos. O que era hobby virou ofício: passei a editar vídeos, fotografar eventos e, pouco a pouco, a desenhar as peças gráficas que antes eu só admirava em outros trabalhos.</p>
-        <p class="pull" data-i18n="about.pull">"Aprendi Blender no lançamento, quando praticamente ninguém acreditava em software livre para produção profissional. Hoje uso essa mesma ferramenta open source para dar vida a técnicas cirúrgicas em 3D — a prova de que ferramenta gratuita não é sinônimo de resultado amador."</p>
+        <p class="pull" data-i18n="about.pull">"Uso inteligência artificial do jeito certo: como ferramenta a meu serviço, nunca como piloto automático. Ela acelera o processo, mas quem decide enquadramento, ritmo e acabamento sou eu — por isso fujo do resultado genérico e entrego peças com a minha assinatura, não a de um prompt."</p>
         <p data-i18n="about.p2">Também dei aulas — de informática, de edição, de programação de jogos — para adolescentes, idosos e profissionais em formação. Ensinar me ensinou a simplificar o complexo, uma habilidade que uso todos os dias na Sintegra Surgical Sciences, traduzindo procedimentos cirúrgicos densos em vídeos e materiais que médicos, pacientes e equipes de marketing entendem de imediato.</p>
         <p data-i18n="about.p3">Hoje meu trabalho fica na interseção entre estética e clareza: design que comunica, motion que explica, 3D que aproxima o invisível do visível. E enquanto sigo aprendendo — cursando Design Gráfico e Marketing Digital, arriscando frases em italiano e alemão — continuo acreditando que a melhor ferramenta é a que te deixa mais perto de contar a história certa.</p>
       </div>
@@ -643,7 +559,7 @@ const i18n = {
     "about.eyebrow":"SOBRE MIM",
     "about.title":"De pilotar drones a modelar cirurgias em 3D",
     "about.p1":"Comecei filmando por paixão — um drone, uma câmera, a curiosidade de entender como uma imagem consegue contar uma história inteira em segundos. O que era hobby virou ofício: passei a editar vídeos, fotografar eventos e, pouco a pouco, a desenhar as peças gráficas que antes eu só admirava em outros trabalhos.",
-    "about.pull":'"Aprendi Blender no lançamento, quando praticamente ninguém acreditava em software livre para produção profissional. Hoje uso essa mesma ferramenta open source para dar vida a técnicas cirúrgicas em 3D — a prova de que ferramenta gratuita não é sinônimo de resultado amador."',
+    "about.pull":'"Uso inteligência artificial do jeito certo: como ferramenta a meu serviço, nunca como piloto automático. Ela acelera o processo, mas quem decide enquadramento, ritmo e acabamento sou eu — por isso fujo do resultado genérico e entrego peças com a minha assinatura, não a de um prompt."',
     "about.p2":"Também dei aulas — de informática, de edição, de programação de jogos — para adolescentes, idosos e profissionais em formação. Ensinar me ensinou a simplificar o complexo, uma habilidade que uso todos os dias na Sintegra Surgical Sciences, traduzindo procedimentos cirúrgicos densos em vídeos e materiais que médicos, pacientes e equipes de marketing entendem de imediato.",
     "about.p3":"Hoje meu trabalho fica na interseção entre estética e clareza: design que comunica, motion que explica, 3D que aproxima o invisível do visível. E enquanto sigo aprendendo — cursando Design Gráfico e Marketing Digital, arriscando frases em italiano e alemão — continuo acreditando que a melhor ferramenta é a que te deixa mais perto de contar a história certa.",
     "about.fact1":"Anos de experiência","about.fact2":"Anos, brasileiro","about.fact3":"Idiomas em uso/estudo",
@@ -657,7 +573,7 @@ const i18n = {
     "skills.blender":"Desde o lançamento","skills.game":"Engines & interatividade","skills.tex":"Texturização 3D",
     "skills.drone":"Drones & mapeamento aéreo","skills.dev.title":"Programação","skills.social.title":"Mídias Sociais",
     "skills.social":"Planejamento & conteúdo","skills.teach.title":"Didática","skills.teach":"Cursos & treinamentos",
-    "contact.eyebrow":"PRÓXIMO CORTE","contact.title":"Vamos criar<br>algo juntos",
+    "contact.eyebrow":"PRÓXIMO CORTE","contact.title":"<span class=\"line\">Vamos criar</span><span class=\"line\">algo juntos</span>",
     "contact.loc":"Marília — SP, Brasil · disponível para viagens",
     "footer.made":"Feito com HTML, CSS & café"
   },
@@ -673,7 +589,7 @@ const i18n = {
     "about.eyebrow":"ABOUT ME",
     "about.title":"From flying drones to modeling surgeries in 3D",
     "about.p1":"I started filming out of pure curiosity — a drone, a camera, and the itch to understand how a single image can tell a whole story in seconds. What began as a hobby became a craft: editing video, shooting events, and slowly learning to design the graphics I once only admired in other people's work.",
-    "about.pull":'"I learned Blender at launch, back when almost no one believed free software could handle professional production. Today I use that same open-source tool to bring surgical techniques to life in 3D — proof that free doesn\'t mean amateur."',
+    "about.pull":'"I use artificial intelligence the right way: as a tool that works for me, never as autopilot. It speeds up the process, but I\'m the one deciding framing, rhythm and finish — that\'s why I steer clear of generic results and deliver work that carries my signature, not a prompt\'s."',
     "about.p2":"I also taught — computing, editing, game development — to teenagers, seniors, and professionals in training. Teaching taught me to simplify the complex, a skill I use every day at Sintegra Surgical Sciences, turning dense surgical procedures into videos and materials that doctors, patients, and marketing teams instantly understand.",
     "about.p3":"Today my work sits at the intersection of aesthetics and clarity: design that communicates, motion that explains, 3D that brings the invisible closer. And while I keep learning — studying Graphic Design and Digital Marketing, risking sentences in Italian and German — I still believe the best tool is whichever one gets you closer to telling the right story.",
     "about.fact1":"Years of experience","about.fact2":"Years old, Brazilian","about.fact3":"Languages spoken/learning",
@@ -687,7 +603,7 @@ const i18n = {
     "skills.blender":"Since launch","skills.game":"Engines & interactivity","skills.tex":"3D texturing",
     "skills.drone":"Drones & aerial mapping","skills.dev.title":"Programming","skills.social.title":"Social Media",
     "skills.social":"Planning & content","skills.teach.title":"Teaching","skills.teach":"Courses & training",
-    "contact.eyebrow":"NEXT CUT","contact.title":"Let's create<br>something together",
+    "contact.eyebrow":"NEXT CUT","contact.title":"<span class=\"line\">Let's create</span><span class=\"line\">something together</span>",
     "contact.loc":"Marília — SP, Brazil · available for travel",
     "footer.made":"Made with HTML, CSS & coffee"
   }
@@ -708,29 +624,6 @@ document.querySelectorAll('.langtoggle button').forEach(b=>{
   b.addEventListener('click', ()=> setLang(b.dataset.lang));
 });
 setLang(localStorage.getItem('gva-lang') || 'pt');
-
-/* ============================================================
-   STYLE SWITCHER — TEMPORÁRIO (remover junto com o HTML/CSS)
-   ============================================================ */
-(function(){
-  const root = document.documentElement;
-  const switcher = document.getElementById('style-switcher');
-  const themeButtons = switcher.querySelectorAll('button[data-theme]');
-  function applyTheme(t){
-    root.classList.remove('theme-2','theme-3','theme-4');
-    if(t && t !== 'theme-1') root.classList.add(t);
-    themeButtons.forEach(b=> b.classList.toggle('active', b.dataset.theme === t));
-    localStorage.setItem('gva-theme', t);
-  }
-  themeButtons.forEach(b=> b.addEventListener('click', ()=> applyTheme(b.dataset.theme)));
-  applyTheme(localStorage.getItem('gva-theme') || 'theme-1');
-
-  document.getElementById('ss-close').addEventListener('click', ()=>{
-    switcher.style.display = 'none';
-    localStorage.setItem('gva-switcher-hidden', '1');
-  });
-  if(localStorage.getItem('gva-switcher-hidden') === '1') switcher.style.display = 'none';
-})();
 
 /* ============================================================
    SCRUBBER — scroll progress + fake timecode + nav dots

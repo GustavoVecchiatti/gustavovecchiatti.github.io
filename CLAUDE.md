@@ -25,10 +25,12 @@ assets/models/       → exports .glb do Blender, se algum dia for usado 3D inte
 
 ## Sistema de design (tokens, em `:root` no `<style>`)
 
-- `--paper` (#faf9f6) fundo principal, quase branco — direção minimalista clean pedida pelo usuário
-- `--ink` (#121212) texto principal
-- `--accent` (#ff3b30) vermelho "REC" — usado com moderação, é a cor de assinatura do site (referência a gravação/edição de vídeo)
-- `--accent-2` (#1e40ff) cobalto, uso esporádico
+Tema **"Obsidian"** — monocromático escuro, sem cor de assinatura, sem grain (decidido pelo usuário em 2026-08-20; antes disso o site teve um `#style-switcher` temporário com 4 variantes, hoje removido).
+
+- `--paper` (#000000) fundo principal, preto
+- `--ink` (#ffffff) texto principal
+- `--accent` (#f2ecd9) tom quase-branco/champagne, usado com moderação
+- `--accent-2` (#9a9a9a) cinza, uso esporádico
 - Tipografia: `Space Grotesk` (display/títulos), `Newsreader` itálica (storytelling na seção Sobre), `IBM Plex Mono` (labels, timecodes, eyebrows)
 - **Não trocar a paleta por tons terrosos/creme (#F4F1EA + terracota) nem por dark mode com verde ácido** — são os defaults genéricos de design gerado por IA que foram deliberadamente evitados aqui.
 
@@ -63,7 +65,6 @@ Todos os blocos `.thumb` (cards de projeto) e `.portrait` (foto do Sobre) são a
 - [ ] Adicionar favicon
 - [ ] Revisar/ajustar copy do "Sobre" se o usuário pedir um tom diferente
 - [ ] Opcional: 3D interativo (ex: Three.js + export `.glb` do Blender) na seção de skills, se o usuário quiser elevar ainda mais o "impacto" do site
-- [ ] **Decidir o tema final** entre as 4 versões do `#style-switcher` (barra flutuante temporária, 2026-08-19) e então: aplicar as cores/fontes escolhidas como novo `:root` padrão e remover o bloco do seletor (HTML + CSS `#style-switcher`/`.theme-*` + o IIFE correspondente no JS)
 
 ## O que NÃO fazer sem confirmar com o usuário
 
