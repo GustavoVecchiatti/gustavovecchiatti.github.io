@@ -322,7 +322,7 @@ h1,h2,h3{font-family:var(--font-display); font-weight:700; letter-spacing:-.02em
 #work h2{font-size:clamp(30px,4vw,46px); margin-bottom:12px;}
 #work .lead{font-family:var(--font-serif); font-style:italic; color:var(--gray); max-width:560px; margin-bottom:60px; font-size:19px;}
 
-.drawers{border-top:1px solid var(--line); margin-top:8px;}
+.drawers{border-top:1px solid var(--line); margin-top:8px; overflow-anchor:none;}
 .drawer{border-bottom:1px solid var(--line);}
 .drawer-head{
   width:100%; display:flex; align-items:center; gap:24px;
@@ -347,7 +347,7 @@ h1,h2,h3{font-family:var(--font-display); font-weight:700; letter-spacing:-.02em
 .drawer.open .drawer-icon{transform:rotate(135deg); background:var(--ink);}
 .drawer.open .drawer-icon::before, .drawer.open .drawer-icon::after{background:var(--paper);}
 
-.drawer-body{display:grid; grid-template-rows:0fr; transition:grid-template-rows .5s var(--wipe);}
+.drawer-body{display:grid; grid-template-rows:0fr; transition:grid-template-rows .5s var(--wipe); overflow-anchor:none;}
 .drawer.open .drawer-body{grid-template-rows:1fr;}
 .drawer-inner{overflow:hidden;}
 
@@ -1158,10 +1158,24 @@ drawers.forEach(drawer=>{
   const head = drawer.querySelector('.drawer-head');
   head.addEventListener('click', ()=>{
     const willOpen = !drawer.classList.contains('open');
+    const beforeTop = head.getBoundingClientRect().top;
+
+    /* snap other drawers shut instantly (no animation) so their collapse
+       can't shift the page while the clicked one opens smoothly below */
     drawers.forEach(d=>{
-      d.classList.remove('open');
+      if(d !== drawer && d.classList.contains('open')){
+        const body = d.querySelector('.drawer-body');
+        body.style.transition = 'none';
+        d.classList.remove('open');
+        void body.offsetHeight; // force reflow before re-enabling the transition
+        body.style.transition = '';
+      }
       d.querySelector('.drawer-head').setAttribute('aria-expanded','false');
     });
+
+    /* keep the clicked header pinned to the same spot on screen */
+    window.scrollBy(0, head.getBoundingClientRect().top - beforeTop);
+
     if(willOpen){
       drawer.classList.add('open');
       head.setAttribute('aria-expanded','true');
