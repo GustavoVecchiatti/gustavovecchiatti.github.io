@@ -31,12 +31,12 @@ Tema **"Obsidian"** — monocromático escuro, sem cor de assinatura, sem grain 
 - `--ink` (#ffffff) texto principal
 - `--accent` (#f2ecd9) tom quase-branco/champagne, usado com moderação
 - `--accent-2` (#9a9a9a) cinza, uso esporádico
-- Tipografia: `Space Grotesk` (display/títulos), `Newsreader` itálica (storytelling na seção Sobre), `IBM Plex Mono` (labels, timecodes, eyebrows)
+- Tipografia: fonte única `Gantari` (Google Fonts, variável, pesos 100–900 + itálico) para todo o site — `--font-display`, `--font-serif` e `--font-mono` apontam todos para ela, diferenciados por peso/itálico/letter-spacing conforme o papel (títulos em peso alto, storytelling em itálico, labels/timecodes com letter-spacing largo simulando o antigo mono)
 - **Não trocar a paleta por tons terrosos/creme (#F4F1EA + terracota) nem por dark mode com verde ácido** — são os defaults genéricos de design gerado por IA que foram deliberadamente evitados aqui.
 
 ## Elemento de assinatura (não remover sem discutir com o usuário)
 
-O **"timeline scrubber"** fixo no topo (`#scrubber`) é o elemento central do conceito: uma barra de progresso de scroll estilizada como linha do tempo de edição de vídeo, com timecode falso (`00:00:00:00`) que avança conforme o usuário rola a página, e um ponto vermelho pulsante "REC". Isso é intencional — reforça a identidade de motion designer/videomaker do usuário. Manter esse motivo consistente em qualquer nova seção.
+O **"timeline scrubber"** fixo na base da tela (`#scrubber`, decisão do usuário em 2026-08-20 — antes ficava fixo no topo) é o elemento central do conceito: uma barra de progresso de scroll estilizada como linha do tempo de edição de vídeo, com timecode falso (`00:00:00:00`) que avança conforme o usuário rola a página, e um ponto vermelho pulsante "REC". Isso é intencional — reforça a identidade de motion designer/videomaker do usuário. Manter esse motivo consistente em qualquer nova seção.
 
 ## Sistema de i18n (PT/EN)
 
