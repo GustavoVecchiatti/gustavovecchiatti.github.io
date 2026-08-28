@@ -1176,13 +1176,10 @@ drawers.forEach(drawer=>{
     /* keep the clicked header pinned to the same spot on screen */
     window.scrollBy(0, head.getBoundingClientRect().top - beforeTop);
 
-    if(willOpen){
-      drawer.classList.add('open');
-      head.setAttribute('aria-expanded','true');
-    }
+    drawer.classList.toggle('open', willOpen);
+    head.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
   });
 });
-document.querySelector('.drawer[data-drawer="feed"]')?.classList.add('open');
 
 /* WORK — media carousel (mixed image/video slides, swipe + arrows + dots) */
 function initCarousel(root){
@@ -1398,8 +1395,6 @@ document.querySelectorAll('.media[data-modal-video]').forEach(root=>{
     openMediaModal(`<video src="${src}" controls autoplay playsinline></video>`, true);
   });
 });
-
-document.querySelector('.drawer[data-drawer="feed"] .drawer-head')?.setAttribute('aria-expanded','true');
 </script>
 </body>
 </html>
