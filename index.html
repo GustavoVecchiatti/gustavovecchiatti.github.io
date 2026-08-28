@@ -214,10 +214,10 @@ h1,h2,h3{font-family:var(--font-display); font-weight:700; letter-spacing:-.02em
 .parallax-field{position:absolute; inset:0; z-index:-1; pointer-events:none; overflow:hidden;}
 .parallax-field .word{
   position:absolute; font-family:var(--font-display); font-weight:700;
-  color:#fff; opacity:.05; font-size:14vw; white-space:nowrap; letter-spacing:-.02em;
+  color:#fff; opacity:.12; font-size:14vw; white-space:nowrap; letter-spacing:-.02em;
   user-select:none; will-change:transform;
 }
-.parallax-field .word.dim{opacity:.025;}
+.parallax-field .word.dim{opacity:.06;}
 
 /* film-grain texture, scoped to hero for a filmic/editing-desk feel */
 .grain{
@@ -741,9 +741,9 @@ footer{
             <div class="projects">
               <div class="project">
                 <div class="media video placeholder" data-modal-youtube="frmUDoAYyGI"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
-                <div class="title" data-i18n="work.3d.01.title">Conceito · Cage Intersomático</div>
-                <div class="tags" data-i18n="work.3d.01.tags">3D · PROJETO CONCEITO</div>
-                <div class="desc" data-i18n="work.3d.01.desc">Visualização 3D conceitual de um cage intersomático, explorando geometria e encaixe da peça antes da fabricação. Modelagem e renderização em Blender.</div>
+                <div class="title" data-i18n="work.3d.01.title">Fusão Vertebral · Cage Intersomático</div>
+                <div class="tags" data-i18n="work.3d.01.tags">3D · VISUALIZAÇÃO CIRÚRGICA</div>
+                <div class="desc" data-i18n="work.3d.01.desc">Animação 3D da técnica cirúrgica de fusão vertebral com cage intersomático, demonstrando o posicionamento do implante entre as vértebras.</div>
               </div>
               <div class="project">
                 <div class="media video placeholder" data-modal-youtube="Y8pxKtOrz5k"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
@@ -850,12 +850,6 @@ footer{
                 <div class="tags" data-i18n="work.product.03.tags">3D · VISUALIZAÇÃO DE PRODUTO</div>
                 <div class="desc" data-i18n="work.product.03.desc">Visualização 3D da FitlockRSC®, âncora sem nó. A animação traduz o mecanismo de fixação em imagens claras, destacando as features que diferenciam o produto no mercado.</div>
               </div>
-              <div class="project">
-                <div class="media video placeholder" data-modal-youtube="COLE-O-ID-AQUI-04"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
-                <div class="title">Produto 04</div>
-                <div class="tags" data-i18n="work.placeholder.tag">EM BREVE</div>
-                <div class="desc" data-i18n="work.placeholder.desc">Trabalho em produção, detalhes em breve.</div>
-              </div>
             </div>
           </div>
         </div>
@@ -891,7 +885,7 @@ footer{
 <section id="contact">
   <div class="wrap">
     <div class="eyebrow" data-i18n="contact.eyebrow">PRÓXIMO CORTE</div>
-    <h2><a href="mailto:gustavo.v.aguiar@outlook.com" data-i18n="contact.title">Vamos criar<br>algo juntos</a></h2>
+    <h2><a href="mailto:gustavo.v.aguiar@outlook.com" data-i18n="contact.title">Vamos criar<br>algo juntos?</a></h2>
     <div class="row">
       <a href="mailto:gustavo.v.aguiar@outlook.com">gustavo.v.aguiar@outlook.com</a>
       <a href="tel:+5511974270046">+55 (11) 97427-0046</a>
@@ -937,8 +931,8 @@ const i18n = {
     "work.stories.03.desc":"Peça de lançamento do LinkButton®, botão acoplável desenvolvido pela Síntegra. Comunicação de produto para redes sociais, apresentando a novidade ao público de ortopedia.",
     "work.stories.04.title":"Stand · CBCOC","work.stories.04.tags":"STORY · COBERTURA DE EVENTO",
     "work.stories.04.desc":"Divulgação do stand da Síntegra no CBCOC, Congresso Brasileiro de Cirurgia de Ombro e Cotovelo, reforçando a presença da marca durante o evento.",
-    "work.3d.01.title":"Conceito · Cage Intersomático","work.3d.01.tags":"3D · PROJETO CONCEITO",
-    "work.3d.01.desc":"Visualização 3D conceitual de um cage intersomático, explorando geometria e encaixe da peça antes da fabricação. Modelagem e renderização em Blender.",
+    "work.3d.01.title":"Fusão Vertebral · Cage Intersomático","work.3d.01.tags":"3D · VISUALIZAÇÃO CIRÚRGICA",
+    "work.3d.01.desc":"Animação 3D da técnica cirúrgica de fusão vertebral com cage intersomático, demonstrando o posicionamento do implante entre as vértebras.",
     "work.3d.02.title":"Demonstração · Inserção do LinkButton®","work.3d.02.tags":"3D · ANIMAÇÃO TÉCNICA",
     "work.3d.02.desc":"Animação 3D demonstrando o passo a passo de inserção do LinkButton®, botão acoplável da Síntegra. Material educativo para equipes médicas e força de vendas.",
     "work.3d.03.title":"Reparo de Lesão na Raiz Meniscal","work.3d.03.tags":"3D · VISUALIZAÇÃO CIRÚRGICA",
@@ -975,7 +969,7 @@ const i18n = {
     "skills.blender":"Animação 3D","skills.game":"Engines & interatividade","skills.tex":"Texturização 3D",
     "skills.drone":"Fotografia, filmagem, mapeamento aéreo","skills.dev.title":"Programação","skills.social.title":"Mídias Sociais",
     "skills.social":"Planejamento & conteúdo","skills.teach.title":"Didática","skills.teach":"Cursos & treinamentos",
-    "contact.eyebrow":"PRÓXIMO CORTE","contact.title":"<span class=\"line\">Vamos criar</span><span class=\"line\">algo juntos</span>",
+    "contact.eyebrow":"PRÓXIMO CORTE","contact.title":"<span class=\"line\">Vamos criar</span><span class=\"line\">algo juntos?</span>",
     "contact.loc":"Marília, SP, Brasil · disponível para viagens",
     "footer.made":"Feito com HTML, CSS & café"
   },
@@ -1006,8 +1000,8 @@ const i18n = {
     "work.stories.03.desc":"Launch piece for LinkButton®, an attachable button developed by Síntegra. Product announcement for social media aimed at the orthopedics audience.",
     "work.stories.04.title":"Booth · CBCOC","work.stories.04.tags":"STORY · EVENT COVERAGE",
     "work.stories.04.desc":"Promotion of Síntegra's booth at CBCOC, the Brazilian Congress of Shoulder and Elbow Surgery, reinforcing brand presence during the event.",
-    "work.3d.01.title":"Concept · Interbody Cage","work.3d.01.tags":"3D · CONCEPT PROJECT",
-    "work.3d.01.desc":"Conceptual 3D visualization of an interbody cage, exploring the part's geometry and fit before manufacturing. Modeled and rendered in Blender.",
+    "work.3d.01.title":"Spinal Fusion · Interbody Cage","work.3d.01.tags":"3D · SURGICAL VISUALIZATION",
+    "work.3d.01.desc":"3D animation of the spinal fusion surgical technique with an interbody cage, demonstrating implant placement between the vertebrae.",
     "work.3d.02.title":"Demo · LinkButton® Insertion","work.3d.02.tags":"3D · TECHNICAL ANIMATION",
     "work.3d.02.desc":"3D animation demonstrating the step-by-step insertion of the LinkButton®, Síntegra's attachable button device. Educational material for medical teams and sales.",
     "work.3d.03.title":"Meniscal Root Repair","work.3d.03.tags":"3D · SURGICAL VISUALIZATION",
@@ -1044,7 +1038,7 @@ const i18n = {
     "skills.blender":"3D Animation","skills.game":"Engines & interactivity","skills.tex":"3D texturing",
     "skills.drone":"Photography, filming, aerial mapping","skills.dev.title":"Programming","skills.social.title":"Social Media",
     "skills.social":"Planning & content","skills.teach.title":"Teaching","skills.teach":"Courses & training",
-    "contact.eyebrow":"NEXT CUT","contact.title":"<span class=\"line\">Let's create</span><span class=\"line\">something together</span>",
+    "contact.eyebrow":"NEXT CUT","contact.title":"<span class=\"line\">Let's create</span><span class=\"line\">something together?</span>",
     "contact.loc":"Marília, SP, Brazil · available for travel",
     "footer.made":"Made with HTML, CSS & coffee"
   }
