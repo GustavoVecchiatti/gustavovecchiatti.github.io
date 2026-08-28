@@ -158,7 +158,7 @@ h1,h2,h3{font-family:var(--font-display); font-weight:700; letter-spacing:-.02em
    HERO
    ============================================================ */
 #hero{
-  min-height:100vh; display:flex; flex-direction:column; justify-content:center;
+  position:relative; min-height:100vh; display:flex; flex-direction:column; justify-content:center;
   padding:64px 0 110px; border-bottom:1px solid var(--line);
 }
 #hero .grid{
@@ -214,10 +214,10 @@ h1,h2,h3{font-family:var(--font-display); font-weight:700; letter-spacing:-.02em
 .parallax-field{position:absolute; inset:0; z-index:-1; pointer-events:none; overflow:hidden;}
 .parallax-field .word{
   position:absolute; font-family:var(--font-display); font-weight:700;
-  color:var(--paper-dim); font-size:14vw; white-space:nowrap; letter-spacing:-.02em;
+  color:#fff; opacity:.05; font-size:14vw; white-space:nowrap; letter-spacing:-.02em;
   user-select:none; will-change:transform;
 }
-.parallax-field .word.dim{color:var(--paper-dim); opacity:.6;}
+.parallax-field .word.dim{opacity:.025;}
 
 /* film-grain texture, scoped to hero for a filmic/editing-desk feel */
 .grain{
@@ -275,9 +275,13 @@ h1,h2,h3{font-family:var(--font-display); font-weight:700; letter-spacing:-.02em
 }
 @media (max-width:860px){ #about .cols{grid-template-columns:1fr; gap:36px;} }
 #about .portrait{
-  aspect-ratio:4/5; background:url('assets/images/portrait.jpg') center/cover;
+  aspect-ratio:4/5; background:url('assets/images/portrait.png') center top/120% auto;
   border:1px solid var(--line);
   position:sticky; top:70px;
+  clip-path:polygon(0 0, calc(100% - 46px) 0, 100% 46px, 100% 100%, 46px 100%, 0 calc(100% - 46px));
+}
+@media (max-width:860px){
+  #about .portrait{clip-path:polygon(0 0, calc(100% - 30px) 0, 100% 30px, 100% 100%, 30px 100%, 0 calc(100% - 30px));}
 }
 #about h2{font-size:clamp(30px,4vw,46px); margin-bottom:30px;}
 #about .story p{
@@ -354,10 +358,17 @@ h1,h2,h3{font-family:var(--font-display); font-weight:700; letter-spacing:-.02em
 @media (max-width:1100px){ .projects{grid-template-columns:repeat(2,1fr);} }
 @media (max-width:640px){ .projects{grid-template-columns:1fr;} }
 .project{
-  background:var(--paper); padding:34px; display:flex; flex-direction:column;
+  background:var(--paper); padding:34px; display:flex; flex-direction:column; min-width:0;
 }
+.project .title{overflow-wrap:break-word;}
 .project .media{
-  position:relative; aspect-ratio:16/9; background:#111; margin:-34px -34px 26px; overflow:hidden;
+  position:relative; aspect-ratio:1080/1350; background:#111; margin:-34px -34px 26px; overflow:hidden;
+}
+.project .media.story{
+  aspect-ratio:1080/1920;
+}
+.project .media.video{
+  aspect-ratio:16/9;
 }
 .project .media iframe{position:absolute; inset:0; width:100%; height:100%; border:0;}
 .project .media.placeholder{
@@ -369,9 +380,100 @@ h1,h2,h3{font-family:var(--font-display); font-weight:700; letter-spacing:-.02em
 .project .media.placeholder span{
   font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--gray);
 }
+.project .media.carousel{cursor:grab; touch-action:pan-y;}
+.project .media.carousel:active{cursor:grabbing;}
+.carousel-track{display:flex; height:100%; width:100%; transition:transform .45s var(--wipe); will-change:transform;}
+.carousel-track .slide{flex:0 0 100%; height:100%; position:relative;}
+.carousel-track .slide img, .carousel-track .slide video{width:100%; height:100%; object-fit:cover; display:block;}
+.carousel-track .slide video{pointer-events:none;}
+.carousel-track .slide img.expandable{cursor:zoom-in; -webkit-user-drag:none; user-select:none;}
+.carousel-nav{position:absolute; top:50%; transform:translateY(-50%); width:30px; height:30px; display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.5); border:1px solid var(--line); color:var(--ink); cursor:pointer; font-size:15px; line-height:1; z-index:2;
+  opacity:0; transition:opacity .25s ease, background .25s ease;}
+.project .media.carousel:hover .carousel-nav{opacity:1;}
+.carousel-nav:hover{background:rgba(0,0,0,.8);}
+.carousel-nav.prev{left:10px;}
+.carousel-nav.next{right:10px;}
+.carousel-dots{position:absolute; bottom:12px; left:0; right:0; display:flex; justify-content:center; gap:6px; z-index:2;}
+.carousel-dots .dot{width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.35); cursor:pointer; transition:background .25s ease, transform .25s ease; border:0; padding:0;}
+.carousel-dots .dot.active{background:var(--accent); transform:scale(1.3);}
 .project .title{font-size:clamp(22px,2.4vw,30px); font-weight:700;}
 .project .tags{margin-top:14px; font-family:var(--font-mono); font-size:11px; color:var(--gray); letter-spacing:.03em;}
 .project .desc{margin-top:12px; font-size:14px; color:var(--gray); max-width:420px;}
+
+/* EVENT GALLERY — masonry grid of mixed-orientation photos, click to lightbox */
+.gallery-intro{font-size:14px; color:var(--gray); max-width:640px; margin:20px 0 26px;}
+.event-gallery{columns:3 260px; column-gap:2px; margin-bottom:40px;}
+@media (max-width:720px){ .event-gallery{columns:2 160px;} }
+.event-gallery-item{position:relative; break-inside:avoid; margin-bottom:2px; cursor:zoom-in; overflow:hidden;}
+.event-gallery-item img{
+  width:100%; display:block; border:1px solid var(--line);
+  filter:grayscale(.15) brightness(.92); transition:filter .35s ease, transform .35s ease;
+}
+.event-gallery-item:hover img{filter:grayscale(0) brightness(1); transform:scale(1.015);}
+.event-gallery-caption{
+  position:absolute; left:0; right:0; bottom:0; padding:26px 12px 10px;
+  background:linear-gradient(to top, rgba(0,0,0,.88), rgba(0,0,0,0));
+  color:#fff; font-family:var(--font-mono); font-size:11px; line-height:1.45; letter-spacing:.01em;
+  pointer-events:none;
+}
+.event-gallery-video{position:relative; break-inside:avoid; margin-bottom:2px; cursor:pointer; overflow:hidden;}
+.event-gallery-video img{
+  width:100%; display:block; border:1px solid var(--line);
+  filter:grayscale(.15) brightness(.92); transition:filter .35s ease, transform .35s ease;
+}
+.event-gallery-video:hover img{filter:grayscale(0) brightness(1); transform:scale(1.015);}
+.event-gallery-video .play-btn{
+  position:absolute; inset:0; margin:auto; width:56px; height:56px; border:1px solid var(--ink);
+  border-radius:50%; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.4); z-index:2;
+}
+.event-gallery-video .play-btn::after{
+  content:''; margin-left:4px; border-style:solid; border-width:10px 0 10px 16px;
+  border-color:transparent transparent transparent var(--ink);
+}
+.lightbox{
+  position:fixed; inset:0; background:rgba(0,0,0,.92); display:flex; align-items:center; justify-content:center;
+  padding:40px; z-index:200; opacity:0; pointer-events:none; transition:opacity .3s ease;
+}
+.lightbox.open{opacity:1; pointer-events:auto;}
+.lightbox-body{display:flex; flex-direction:column; align-items:center; max-width:100%; max-height:100%;}
+.lightbox-body img{max-width:100%; max-height:80vh; border:1px solid var(--line);}
+.lightbox-caption{
+  margin-top:14px; max-width:640px; font-family:var(--font-mono); font-size:12.5px; color:var(--ink-soft);
+  text-align:center; line-height:1.5;
+}
+.lightbox-close{
+  position:absolute; top:20px; right:24px; width:36px; height:36px; border:1px solid var(--line);
+  background:transparent; color:var(--ink); font-size:20px; line-height:1; cursor:pointer;
+}
+
+/* CLICK-TO-PLAY media (thumb + play button that opens a modal player) */
+.media.click-play{background-size:cover; background-position:center; cursor:pointer;}
+.media.click-play .play-btn{
+  position:absolute; inset:0; margin:auto; width:64px; height:64px; border:1px solid var(--ink);
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.4); transition:transform .25s ease, background .25s ease;
+}
+.media.click-play .play-btn::after{
+  content:''; margin-left:4px; border-style:solid; border-width:11px 0 11px 18px;
+  border-color:transparent transparent transparent var(--ink);
+}
+.media.click-play:hover .play-btn{transform:scale(1.08); background:rgba(0,0,0,.6);}
+
+.media-modal{
+  position:fixed; inset:0; background:rgba(0,0,0,.92); display:flex; align-items:center; justify-content:center;
+  padding:40px; z-index:200; opacity:0; pointer-events:none; transition:opacity .3s ease;
+}
+.media-modal.open{opacity:1; pointer-events:auto;}
+.media-modal .frame{position:relative; width:min(92vw, 960px); aspect-ratio:16/9; background:#000;}
+.media-modal .frame.is-vertical{width:min(90vw, 420px); aspect-ratio:9/16;}
+.media-modal .frame iframe, .media-modal .frame video{
+  position:absolute; inset:0; width:100%; height:100%; border:0; background:#000;
+}
+.media-modal-close{
+  position:absolute; top:20px; right:24px; width:36px; height:36px; border:1px solid var(--line);
+  background:transparent; color:var(--ink); font-size:20px; line-height:1; cursor:pointer; z-index:2;
+}
 
 /* ============================================================
    SKILLS grid
@@ -382,8 +484,8 @@ h1,h2,h3{font-family:var(--font-display); font-weight:700; letter-spacing:-.02em
 .skillgrid .cell{background:var(--paper); padding:26px 20px; min-height:120px; display:flex; flex-direction:column; justify-content:space-between;}
 .skillgrid .cell h4{font-size:16px; font-weight:600;}
 .skillgrid .cell span{font-family:var(--font-mono); font-size:10.5px; color:var(--gray); text-transform:uppercase; letter-spacing:.04em;}
-.skillgrid .cell.hi{background:var(--ink); color:var(--paper);}
-.skillgrid .cell.hi span{color:var(--muted-on-ink);}
+.skillgrid .cell:hover{background:var(--ink); color:var(--paper); cursor:default;}
+.skillgrid .cell:hover span{color:var(--muted-on-ink);}
 
 /* ============================================================
    CONTACT
@@ -493,11 +595,11 @@ footer{
       <span><em>GUSTAVO</em></span>
       <span><em>VECCHIATTI</em></span>
     </h1>
-    <p class="role" data-i18n="hero.role">Designer gráfico e <strong>motion designer</strong> com mais de 10 anos transformando ideias complexas (cirurgias, marcas, produtos) em imagens que qualquer pessoa entende.</p>
+    <p class="role" data-i18n="hero.role">Fotógrafo, Videomaker, Designer Gráfico, Motion Designer e Animador com mais de 10 anos transformando ideias complexas em imagens que qualquer pessoa entende.</p>
     <div class="meta">
       <div data-i18n-group="hero.meta1"><span data-i18n="hero.meta1.label">BASEADO EM</span><span data-i18n="hero.meta1.value">Marília, SP, Brasil</span></div>
       <div><span data-i18n="hero.meta2.label">ATUANDO EM</span><span data-i18n="hero.meta2.value">Design de Saúde &amp; Tecnologia</span></div>
-      <div><span data-i18n="hero.meta3.label">FERRAMENTA-ASSINATURA</span><span>Blender · open source</span></div>
+      <div><span data-i18n="hero.meta3.label">FERRAMENTAS ASSINATURA</span><span>Adobe Creative Cloud e Blender 3D</span></div>
     </div>
   </div>
   <div class="scrolldown"><div class="bar"></div><span data-i18n="hero.scroll">ROLE PARA COMEÇAR</span></div>
@@ -515,7 +617,7 @@ footer{
       <div class="story">
         <p data-i18n="about.p1">Comecei filmando por paixão: um drone, uma câmera, a curiosidade de entender como uma imagem consegue contar uma história inteira em segundos. O que era hobby virou ofício: passei a editar vídeos, fotografar eventos e, pouco a pouco, a desenhar as peças gráficas que antes eu só admirava em outros trabalhos.</p>
         <p class="pull" data-i18n="about.pull">"Uso inteligência artificial do jeito certo: como ferramenta a meu serviço, nunca como piloto automático. Ela acelera o processo, mas quem decide enquadramento, ritmo e acabamento sou eu. Por isso, fujo do resultado genérico e entrego peças com a minha assinatura, não a de um prompt."</p>
-        <p data-i18n="about.p2">Também dei aulas (de informática, de edição, de programação de jogos) para adolescentes, idosos e profissionais em formação. Ensinar me ensinou a simplificar o complexo, uma habilidade que uso todos os dias no meu trabalho, traduzindo procedimentos cirúrgicos densos em vídeos e materiais que médicos, pacientes e equipes de marketing entendem de imediato.</p>
+        <p data-i18n="about.p2">Também dei aulas (de informática, de edição, de programação de jogos, de fotografia e de produção audiovisual) para adolescentes, idosos e profissionais em formação. Ensinar me ensinou a simplificar o complexo, uma habilidade que uso todos os dias no meu trabalho, traduzindo procedimentos cirúrgicos densos em vídeos e materiais que médicos, pacientes e equipes de marketing entendem de imediato.</p>
         <p data-i18n="about.p3">Hoje meu trabalho fica na interseção entre estética e clareza: design que comunica, motion que explica, 3D que aproxima o invisível do visível. E enquanto sigo aprendendo, continuo acreditando que a melhor ferramenta é a que te deixa mais perto de contar a história certa.</p>
       </div>
       <div class="facts">
@@ -551,78 +653,78 @@ footer{
   <div class="wrap">
     <div class="eyebrow" data-i18n="work.eyebrow">PORTFÓLIO SELECIONADO</div>
     <h2 data-i18n="work.title">Trabalhos recentes</h2>
-    <p class="lead" data-i18n="work.lead">Uma seleção de vídeos reais de motion e 3D produzidos para o setor de saúde.</p>
+    <p class="lead" data-i18n="work.lead">Uma seleção de trabalhos reais em social media, visualização cirúrgica e audiovisual produzidos para o setor de saúde.</p>
 
     <div class="drawers">
 
-      <div class="drawer" data-drawer="design">
+      <div class="drawer" data-drawer="feed">
         <button class="drawer-head" aria-expanded="false">
-          <span class="drawer-name" data-i18n="work.cat.design">Design</span>
+          <span class="drawer-name" data-i18n="work.cat.feed">Social Media Feed</span>
           <span class="drawer-icon"></span>
         </button>
         <div class="drawer-body">
           <div class="drawer-inner">
             <div class="projects">
               <div class="project">
-                <div class="media placeholder"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
-                <div class="title">Design 01</div>
-                <div class="tags" data-i18n="work.placeholder.tag">EM BREVE</div>
-                <div class="desc" data-i18n="work.placeholder.desc">Trabalho em produção, detalhes em breve.</div>
+                <div class="media placeholder" data-media="assets/work/feed/feed-01"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title" data-i18n="work.feed.01.title">Precision MR® · Features do Suturador de Menisco</div>
+                <div class="tags" data-i18n="work.feed.01.tags">FEED · CARROSSEL DE PRODUTO</div>
+                <div class="desc" data-i18n="work.feed.01.desc">Features do Precision MR®, suturador de menisco carro-chefe da Síntegra. Carrossel para redes sociais destacando os diferenciais do produto.</div>
               </div>
               <div class="project">
-                <div class="media placeholder"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
-                <div class="title">Design 02</div>
-                <div class="tags" data-i18n="work.placeholder.tag">EM BREVE</div>
-                <div class="desc" data-i18n="work.placeholder.desc">Trabalho em produção, detalhes em breve.</div>
+                <div class="media placeholder" data-media="assets/work/feed/feed-02"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title" data-i18n="work.feed.02.title">Portfólio de Ombro · Síntegra</div>
+                <div class="tags" data-i18n="work.feed.02.tags">FEED · PORTFÓLIO DE PRODUTO</div>
+                <div class="desc" data-i18n="work.feed.02.desc">Peça de portfólio apresentando a linha de produtos para cirurgia de ombro da Síntegra.</div>
               </div>
               <div class="project">
-                <div class="media placeholder"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
-                <div class="title">Design 03</div>
-                <div class="tags" data-i18n="work.placeholder.tag">EM BREVE</div>
-                <div class="desc" data-i18n="work.placeholder.desc">Trabalho em produção, detalhes em breve.</div>
+                <div class="media placeholder" data-media="assets/work/feed/feed-03"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title" data-i18n="work.feed.03.title">Coleção · Datas Comemorativas</div>
+                <div class="tags" data-i18n="work.feed.03.tags">FEED · COLEÇÃO DE POSTS</div>
+                <div class="desc" data-i18n="work.feed.03.desc">Coleção de artes para datas comemorativas, carrossel com peças desenvolvidas para o calendário de redes sociais da Síntegra.</div>
               </div>
               <div class="project">
-                <div class="media placeholder"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
-                <div class="title">Design 04</div>
-                <div class="tags" data-i18n="work.placeholder.tag">EM BREVE</div>
-                <div class="desc" data-i18n="work.placeholder.desc">Trabalho em produção, detalhes em breve.</div>
+                <div class="media placeholder" data-media="assets/work/feed/feed-04"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title" data-i18n="work.feed.04.title">Indicações de Uso · Fitlock® RSC</div>
+                <div class="tags" data-i18n="work.feed.04.tags">FEED · CARROSSEL EDUCATIVO</div>
+                <div class="desc" data-i18n="work.feed.04.desc">Carrossel educativo com as indicações de uso da Fitlock® RSC, âncora sem nó da Síntegra. Conteúdo técnico traduzido para redes sociais.</div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="drawer" data-drawer="motion">
+      <div class="drawer" data-drawer="stories">
         <button class="drawer-head" aria-expanded="false">
-          <span class="drawer-name" data-i18n="work.cat.motion">Motion</span>
+          <span class="drawer-name" data-i18n="work.cat.stories">Social Media Stories</span>
           <span class="drawer-icon"></span>
         </button>
         <div class="drawer-body">
           <div class="drawer-inner">
             <div class="projects">
               <div class="project">
-                <div class="media placeholder"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
-                <div class="title">Motion 01</div>
-                <div class="tags" data-i18n="work.placeholder.tag">EM BREVE</div>
-                <div class="desc" data-i18n="work.placeholder.desc">Trabalho em produção, detalhes em breve.</div>
+                <div class="media story placeholder" data-media="assets/work/stories/stories-01"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title" data-i18n="work.stories.01.title">Save the Date · CBOO Oncologia Ortopédica</div>
+                <div class="tags" data-i18n="work.stories.01.tags">STORY · SAVE THE DATE</div>
+                <div class="desc" data-i18n="work.stories.01.desc">Peça de save the date para o CBOO, Congresso Brasileiro de Oncologia Ortopédica, em Florianópolis. Comunicação vertical para Stories, com identidade alinhada ao evento.</div>
               </div>
               <div class="project">
-                <div class="media placeholder"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
-                <div class="title">Motion 02</div>
-                <div class="tags" data-i18n="work.placeholder.tag">EM BREVE</div>
-                <div class="desc" data-i18n="work.placeholder.desc">Trabalho em produção, detalhes em breve.</div>
+                <div class="media story placeholder" data-media="assets/work/stories/stories-02"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title" data-i18n="work.stories.02.title">Stand · Congresso Rede D'Or de Ortopedia</div>
+                <div class="tags" data-i18n="work.stories.02.tags">STORY · COBERTURA DE EVENTO</div>
+                <div class="desc" data-i18n="work.stories.02.desc">Divulgação do stand da Síntegra no Congresso Internacional de Ortopedia da Rede D'Or, no Rio de Janeiro. Registro do estande para as redes sociais durante o evento.</div>
               </div>
               <div class="project">
-                <div class="media placeholder"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
-                <div class="title">Motion 03</div>
-                <div class="tags" data-i18n="work.placeholder.tag">EM BREVE</div>
-                <div class="desc" data-i18n="work.placeholder.desc">Trabalho em produção, detalhes em breve.</div>
+                <div class="media story placeholder" data-media="assets/work/stories/stories-03"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title" data-i18n="work.stories.03.title">Lançamento · LinkButton®</div>
+                <div class="tags" data-i18n="work.stories.03.tags">STORY · LANÇAMENTO DE PRODUTO</div>
+                <div class="desc" data-i18n="work.stories.03.desc">Peça de lançamento do LinkButton®, botão acoplável desenvolvido pela Síntegra. Comunicação de produto para redes sociais, apresentando a novidade ao público de ortopedia.</div>
               </div>
               <div class="project">
-                <div class="media placeholder"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
-                <div class="title">Motion 04</div>
-                <div class="tags" data-i18n="work.placeholder.tag">EM BREVE</div>
-                <div class="desc" data-i18n="work.placeholder.desc">Trabalho em produção, detalhes em breve.</div>
+                <div class="media story placeholder" data-media="assets/work/stories/stories-04"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title" data-i18n="work.stories.04.title">Stand · CBCOC</div>
+                <div class="tags" data-i18n="work.stories.04.tags">STORY · COBERTURA DE EVENTO</div>
+                <div class="desc" data-i18n="work.stories.04.desc">Divulgação do stand da Síntegra no CBCOC, Congresso Brasileiro de Cirurgia de Ombro e Cotovelo, reforçando a presença da marca durante o evento.</div>
               </div>
             </div>
           </div>
@@ -631,35 +733,41 @@ footer{
 
       <div class="drawer" data-drawer="3d">
         <button class="drawer-head" aria-expanded="false">
-          <span class="drawer-name" data-i18n="work.cat.3d">Animação 3D</span>
+          <span class="drawer-name" data-i18n="work.cat.3d">Visualização Cirúrgica</span>
           <span class="drawer-icon"></span>
         </button>
         <div class="drawer-body">
           <div class="drawer-inner">
             <div class="projects">
               <div class="project">
-                <div class="media placeholder"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
-                <div class="title">3D 01</div>
-                <div class="tags" data-i18n="work.placeholder.tag">EM BREVE</div>
-                <div class="desc" data-i18n="work.placeholder.desc">Trabalho em produção, detalhes em breve.</div>
+                <div class="media video placeholder" data-modal-youtube="frmUDoAYyGI"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title" data-i18n="work.3d.01.title">Conceito · Cage Intersomático</div>
+                <div class="tags" data-i18n="work.3d.01.tags">3D · PROJETO CONCEITO</div>
+                <div class="desc" data-i18n="work.3d.01.desc">Visualização 3D conceitual de um cage intersomático, explorando geometria e encaixe da peça antes da fabricação. Modelagem e renderização em Blender.</div>
               </div>
               <div class="project">
-                <div class="media placeholder"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
-                <div class="title">3D 02</div>
-                <div class="tags" data-i18n="work.placeholder.tag">EM BREVE</div>
-                <div class="desc" data-i18n="work.placeholder.desc">Trabalho em produção, detalhes em breve.</div>
+                <div class="media video placeholder" data-modal-youtube="Y8pxKtOrz5k"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title" data-i18n="work.3d.02.title">Demonstração · Inserção do LinkButton®</div>
+                <div class="tags" data-i18n="work.3d.02.tags">3D · ANIMAÇÃO TÉCNICA</div>
+                <div class="desc" data-i18n="work.3d.02.desc">Animação 3D demonstrando o passo a passo de inserção do LinkButton®, botão acoplável da Síntegra. Material educativo para equipes médicas e força de vendas.</div>
               </div>
               <div class="project">
-                <div class="media placeholder"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
-                <div class="title">3D 03</div>
-                <div class="tags" data-i18n="work.placeholder.tag">EM BREVE</div>
-                <div class="desc" data-i18n="work.placeholder.desc">Trabalho em produção, detalhes em breve.</div>
+                <div class="media video placeholder" data-modal-youtube="xIrRCAdD_E0"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title" data-i18n="work.3d.03.title">Reparo de Lesão na Raiz Meniscal</div>
+                <div class="tags" data-i18n="work.3d.03.tags">3D · VISUALIZAÇÃO CIRÚRGICA</div>
+                <div class="desc" data-i18n="work.3d.03.desc">Animação 3D do procedimento cirúrgico de reparo de lesão na raiz meniscal, traduzindo uma técnica complexa numa sequência clara e didática.</div>
               </div>
               <div class="project">
-                <div class="media placeholder"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
-                <div class="title">3D 04</div>
-                <div class="tags" data-i18n="work.placeholder.tag">EM BREVE</div>
-                <div class="desc" data-i18n="work.placeholder.desc">Trabalho em produção, detalhes em breve.</div>
+                <div class="media video placeholder" data-modal-youtube="FMVjF9JNJc0"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title" data-i18n="work.3d.04.title">Reparo em Dupla Fileira · Tendão de Aquiles</div>
+                <div class="tags" data-i18n="work.3d.04.tags">3D · VISUALIZAÇÃO CIRÚRGICA</div>
+                <div class="desc" data-i18n="work.3d.04.desc">Animação 3D da técnica de reparo em dupla fileira do tendão de Aquiles, com âncora Fitlock® roscada. Demonstração passo a passo do procedimento.</div>
+              </div>
+              <div class="project">
+                <div class="media video placeholder" data-modal-youtube="5WeVsFwhzW4"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title" data-i18n="work.3d.05.title">Reparo do Lábio Glenoidal · Âncora Fitlock®</div>
+                <div class="tags" data-i18n="work.3d.05.tags">3D · VISUALIZAÇÃO CIRÚRGICA</div>
+                <div class="desc" data-i18n="work.3d.05.desc">Animação 3D do reparo do lábio glenoidal com âncora Fitlock® impactada, mostrando o posicionamento e a fixação do implante na articulação do ombro.</div>
               </div>
             </div>
           </div>
@@ -668,33 +776,83 @@ footer{
 
       <div class="drawer" data-drawer="audiovisual">
         <button class="drawer-head" aria-expanded="false">
-          <span class="drawer-name" data-i18n="work.cat.audiovisual">Audiovisual</span>
+          <span class="drawer-name" data-i18n="work.cat.audiovisual">Audiovisual / Direção de Arte</span>
           <span class="drawer-icon"></span>
         </button>
         <div class="drawer-body">
           <div class="drawer-inner">
             <div class="projects">
               <div class="project">
-                <div class="media placeholder"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
-                <div class="title">Audiovisual 01</div>
-                <div class="tags" data-i18n="work.placeholder.tag">EM BREVE</div>
-                <div class="desc" data-i18n="work.placeholder.desc">Trabalho em produção, detalhes em breve.</div>
+                <div class="media video placeholder" data-modal-youtube="7v4LrQ4h47E"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title" data-i18n="work.av.01.title">Cobertura · 1º Transplante de Menisco da Região</div>
+                <div class="tags" data-i18n="work.av.01.tags">AUDIOVISUAL · COBERTURA MÉDICA</div>
+                <div class="desc" data-i18n="work.av.01.desc">Registro em vídeo do primeiro transplante de menisco realizado em Marília e região. Um celular e um dia de prazo: filmado, editado e entregue sem abrir mão da qualidade profissional.</div>
               </div>
               <div class="project">
-                <div class="media placeholder"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
-                <div class="title">Audiovisual 02</div>
-                <div class="tags" data-i18n="work.placeholder.tag">EM BREVE</div>
-                <div class="desc" data-i18n="work.placeholder.desc">Trabalho em produção, detalhes em breve.</div>
+                <div class="media story placeholder" data-modal-video="assets/work/audiovisual/audiovisual-02/video-01.mp4" data-modal-thumb="assets/work/audiovisual/audiovisual-02/poster.jpg"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title" data-i18n="work.av.02.title">Highlight · Cadaver Lab 01</div>
+                <div class="tags" data-i18n="work.av.02.tags">AUDIOVISUAL · DIREÇÃO DE ARTE</div>
+                <div class="desc" data-i18n="work.av.02.desc">Vídeo de highlights do Cadaver Lab, evento de treinamento cirúrgico ao vivo. Direção de arte assinada por mim, cuidando da linguagem visual de toda a cobertura.</div>
               </div>
               <div class="project">
-                <div class="media placeholder"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
-                <div class="title">Audiovisual 03</div>
-                <div class="tags" data-i18n="work.placeholder.tag">EM BREVE</div>
-                <div class="desc" data-i18n="work.placeholder.desc">Trabalho em produção, detalhes em breve.</div>
+                <div class="media story placeholder" data-modal-video="assets/work/audiovisual/audiovisual-03/video-01.mp4" data-modal-thumb="assets/work/audiovisual/audiovisual-03/poster.jpg"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title" data-i18n="work.av.03.title">Highlight · Cadaver Lab 02</div>
+                <div class="tags" data-i18n="work.av.03.tags">AUDIOVISUAL · DIREÇÃO DE ARTE</div>
+                <div class="desc" data-i18n="work.av.03.desc">Segundo recorte de highlights do Cadaver Lab, com direção de arte assinada por mim, ritmo e identidade visual pensados para redes sociais.</div>
               </div>
               <div class="project">
-                <div class="media placeholder"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
-                <div class="title">Audiovisual 04</div>
+                <div class="media story placeholder" data-modal-video="assets/work/audiovisual/audiovisual-04/video-01.mp4" data-modal-thumb="assets/work/audiovisual/audiovisual-04/poster.jpg"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title" data-i18n="work.av.04.title">Highlight · Cadaver Lab 03</div>
+                <div class="tags" data-i18n="work.av.04.tags">AUDIOVISUAL · DIREÇÃO DE ARTE</div>
+                <div class="desc" data-i18n="work.av.04.desc">Terceiro recorte de highlights do Cadaver Lab, fechando a cobertura do evento com a mesma direção de arte da série.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer" data-drawer="events">
+        <button class="drawer-head" aria-expanded="false">
+          <span class="drawer-name" data-i18n="work.cat.events">Eventos / Stands / Brindes</span>
+          <span class="drawer-icon"></span>
+        </button>
+        <div class="drawer-body">
+          <div class="drawer-inner">
+            <p class="gallery-intro" data-i18n="work.events.intro">Identidade visual completa do estande da Síntegra no CBCJ, o maior congresso de cirurgia de joelho da América Latina. Sinalização, gráfica e ambientação assinadas por mim, do conceito à produção.</p>
+            <div class="event-gallery" data-gallery="assets/work/events"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer" data-drawer="product">
+        <button class="drawer-head" aria-expanded="false">
+          <span class="drawer-name" data-i18n="work.cat.product">Visualização de Produto</span>
+          <span class="drawer-icon"></span>
+        </button>
+        <div class="drawer-body">
+          <div class="drawer-inner">
+            <div class="projects">
+              <div class="project">
+                <div class="media video placeholder" data-modal-youtube="SNMTyCqU3Nk"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title" data-i18n="work.product.01.title">Precision MR® · Suturador de Menisco</div>
+                <div class="tags" data-i18n="work.product.01.tags">3D · VISUALIZAÇÃO DE PRODUTO</div>
+                <div class="desc" data-i18n="work.product.01.desc">Visualização 3D do Precision MR®, suturador de menisco desenvolvido para a Hydrumedical (Portugal). Animação que dá vida ao produto, destacando mecanismo, ergonomia e cada detalhe funcional da peça.</div>
+              </div>
+              <div class="project">
+                <div class="media video placeholder" data-modal-youtube="5mkCT016dVc"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title" data-i18n="work.product.02.title">KneeLink® · Sistema de Reconstrução Extra-articular</div>
+                <div class="tags" data-i18n="work.product.02.tags">3D · VISUALIZAÇÃO DE PRODUTO</div>
+                <div class="desc" data-i18n="work.product.02.desc">Visualização 3D do KneeLink®, sistema de reconstrução extra-articular. Animação que apresenta o produto em movimento, evidenciando seu funcionamento e principais diferenciais técnicos.</div>
+              </div>
+              <div class="project">
+                <div class="media video placeholder" data-modal-youtube="tpNmydQ_sKU"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title" data-i18n="work.product.03.title">FitlockRSC® · Âncora Sem Nó</div>
+                <div class="tags" data-i18n="work.product.03.tags">3D · VISUALIZAÇÃO DE PRODUTO</div>
+                <div class="desc" data-i18n="work.product.03.desc">Visualização 3D da FitlockRSC®, âncora sem nó. A animação traduz o mecanismo de fixação em imagens claras, destacando as features que diferenciam o produto no mercado.</div>
+              </div>
+              <div class="project">
+                <div class="media video placeholder" data-modal-youtube="COLE-O-ID-AQUI-04"><span data-i18n="work.placeholder.tag">EM BREVE</span></div>
+                <div class="title">Produto 04</div>
                 <div class="tags" data-i18n="work.placeholder.tag">EM BREVE</div>
                 <div class="desc" data-i18n="work.placeholder.desc">Trabalho em produção, detalhes em breve.</div>
               </div>
@@ -713,13 +871,13 @@ footer{
 <section id="skills">
   <div class="wrap">
     <div class="eyebrow" data-i18n="skills.eyebrow">FERRAMENTAS &amp; COMPETÊNCIAS</div>
-    <h2 data-i18n="skills.title">Como eu trabalho</h2>
+    <h2 data-i18n="skills.title">Caixa de Ferramentas e Skills</h2>
     <div class="skillgrid">
-      <div class="cell hi"><h4>Blender</h4><span data-i18n="skills.blender">Desde o lançamento</span></div>
+      <div class="cell"><h4>Blender 3D</h4><span data-i18n="skills.blender">Animação 3D</span></div>
       <div class="cell"><h4>Adobe CC</h4><span>AI · PS · AE · PR · ID · XD</span></div>
       <div class="cell"><h4>Unity / Unreal</h4><span data-i18n="skills.game">Engines &amp; interatividade</span></div>
       <div class="cell"><h4>Substance Painter</h4><span data-i18n="skills.tex">Texturização 3D</span></div>
-      <div class="cell"><h4>DJI / VANT</h4><span data-i18n="skills.drone">Drones &amp; mapeamento aéreo</span></div>
+      <div class="cell"><h4>Drone / VANT</h4><span data-i18n="skills.drone">Fotografia, filmagem, mapeamento aéreo</span></div>
       <div class="cell"><h4 data-i18n="skills.dev.title">Programação</h4><span>JS · Node · PHP · C# · Python · SQL</span></div>
       <div class="cell"><h4 data-i18n="skills.social.title">Mídias Sociais</h4><span data-i18n="skills.social">Planejamento &amp; conteúdo</span></div>
       <div class="cell"><h4 data-i18n="skills.teach.title">Didática</h4><span data-i18n="skills.teach">Cursos &amp; treinamentos</span></div>
@@ -756,25 +914,66 @@ const i18n = {
     "scrubber.rec":"REC",
     "hero.kicker":"PORTFÓLIO · DESIGN / MOTION / 3D",
     "hero.frame.scene":"CENA 01 · TAKE 01",
-    "hero.role":'Designer gráfico e <strong>motion designer</strong> com mais de 10 anos transformando ideias complexas (cirurgias, marcas, produtos) em imagens que qualquer pessoa entende.',
+    "hero.role":'Fotógrafo, Videomaker, Designer Gráfico, Motion Designer e Animador com mais de 10 anos transformando ideias complexas em imagens que qualquer pessoa entende.',
     "hero.meta1.label":"BASEADO EM","hero.meta1.value":"Marília, SP, Brasil",
     "hero.meta2.label":"ATUANDO EM","hero.meta2.value":"Design de Saúde & Tecnologia",
-    "hero.meta3.label":"FERRAMENTA-ASSINATURA",
+    "hero.meta3.label":"FERRAMENTAS ASSINATURA",
     "hero.scroll":"ROLE PARA COMEÇAR",
     "about.eyebrow":"SOBRE MIM",
     "about.title":"De pilotar drones a modelar cirurgias em 3D",
     "about.p1":"Comecei filmando por paixão: um drone, uma câmera, a curiosidade de entender como uma imagem consegue contar uma história inteira em segundos. O que era hobby virou ofício: passei a editar vídeos, fotografar eventos e, pouco a pouco, a desenhar as peças gráficas que antes eu só admirava em outros trabalhos.",
     "about.pull":'"Uso inteligência artificial do jeito certo: como ferramenta a meu serviço, nunca como piloto automático. Ela acelera o processo, mas quem decide enquadramento, ritmo e acabamento sou eu. Por isso, fujo do resultado genérico e entrego peças com a minha assinatura, não a de um prompt."',
-    "about.p2":"Também dei aulas (de informática, de edição, de programação de jogos) para adolescentes, idosos e profissionais em formação. Ensinar me ensinou a simplificar o complexo, uma habilidade que uso todos os dias no meu trabalho, traduzindo procedimentos cirúrgicos densos em vídeos e materiais que médicos, pacientes e equipes de marketing entendem de imediato.",
+    "about.p2":"Também dei aulas (de informática, de edição, de programação de jogos, de fotografia e de produção audiovisual) para adolescentes, idosos e profissionais em formação. Ensinar me ensinou a simplificar o complexo, uma habilidade que uso todos os dias no meu trabalho, traduzindo procedimentos cirúrgicos densos em vídeos e materiais que médicos, pacientes e equipes de marketing entendem de imediato.",
     "about.p3":"Hoje meu trabalho fica na interseção entre estética e clareza: design que comunica, motion que explica, 3D que aproxima o invisível do visível. E enquanto sigo aprendendo, continuo acreditando que a melhor ferramenta é a que te deixa mais perto de contar a história certa.",
     "about.fact1":"Anos de experiência","about.fact2":"Anos, brasileiro",
     "work.eyebrow":"PORTFÓLIO SELECIONADO","work.title":"Trabalhos recentes",
-    "work.lead":"Uma seleção de vídeos reais de motion e 3D produzidos para o setor de saúde.",
-    "work.cat.design":"Design","work.cat.motion":"Motion","work.cat.3d":"Animação 3D","work.cat.audiovisual":"Audiovisual",
+    "work.lead":"Uma seleção de trabalhos reais em social media, visualização cirúrgica e audiovisual produzidos para o setor de saúde.",
+    "work.cat.feed":"Social Media Feed","work.cat.stories":"Social Media Stories","work.cat.3d":"Visualização Cirúrgica","work.cat.audiovisual":"Audiovisual / Direção de Arte","work.cat.events":"Eventos / Stands / Brindes","work.cat.product":"Visualização de Produto",
+    "work.stories.01.title":"Save the Date · CBOO Oncologia Ortopédica","work.stories.01.tags":"STORY · SAVE THE DATE",
+    "work.stories.01.desc":"Peça de save the date para o CBOO, Congresso Brasileiro de Oncologia Ortopédica, em Florianópolis. Comunicação vertical para Stories, com identidade alinhada ao evento.",
+    "work.stories.02.title":"Stand · Congresso Rede D'Or de Ortopedia","work.stories.02.tags":"STORY · COBERTURA DE EVENTO",
+    "work.stories.02.desc":"Divulgação do stand da Síntegra no Congresso Internacional de Ortopedia da Rede D'Or, no Rio de Janeiro. Registro do estande para as redes sociais durante o evento.",
+    "work.stories.03.title":"Lançamento · LinkButton®","work.stories.03.tags":"STORY · LANÇAMENTO DE PRODUTO",
+    "work.stories.03.desc":"Peça de lançamento do LinkButton®, botão acoplável desenvolvido pela Síntegra. Comunicação de produto para redes sociais, apresentando a novidade ao público de ortopedia.",
+    "work.stories.04.title":"Stand · CBCOC","work.stories.04.tags":"STORY · COBERTURA DE EVENTO",
+    "work.stories.04.desc":"Divulgação do stand da Síntegra no CBCOC, Congresso Brasileiro de Cirurgia de Ombro e Cotovelo, reforçando a presença da marca durante o evento.",
+    "work.3d.01.title":"Conceito · Cage Intersomático","work.3d.01.tags":"3D · PROJETO CONCEITO",
+    "work.3d.01.desc":"Visualização 3D conceitual de um cage intersomático, explorando geometria e encaixe da peça antes da fabricação. Modelagem e renderização em Blender.",
+    "work.3d.02.title":"Demonstração · Inserção do LinkButton®","work.3d.02.tags":"3D · ANIMAÇÃO TÉCNICA",
+    "work.3d.02.desc":"Animação 3D demonstrando o passo a passo de inserção do LinkButton®, botão acoplável da Síntegra. Material educativo para equipes médicas e força de vendas.",
+    "work.3d.03.title":"Reparo de Lesão na Raiz Meniscal","work.3d.03.tags":"3D · VISUALIZAÇÃO CIRÚRGICA",
+    "work.3d.03.desc":"Animação 3D do procedimento cirúrgico de reparo de lesão na raiz meniscal, traduzindo uma técnica complexa numa sequência clara e didática.",
+    "work.3d.04.title":"Reparo em Dupla Fileira · Tendão de Aquiles","work.3d.04.tags":"3D · VISUALIZAÇÃO CIRÚRGICA",
+    "work.3d.04.desc":"Animação 3D da técnica de reparo em dupla fileira do tendão de Aquiles, com âncora Fitlock® roscada. Demonstração passo a passo do procedimento.",
+    "work.3d.05.title":"Reparo do Lábio Glenoidal · Âncora Fitlock®","work.3d.05.tags":"3D · VISUALIZAÇÃO CIRÚRGICA",
+    "work.3d.05.desc":"Animação 3D do reparo do lábio glenoidal com âncora Fitlock® impactada, mostrando o posicionamento e a fixação do implante na articulação do ombro.",
+    "work.av.01.title":"Cobertura · 1º Transplante de Menisco da Região","work.av.01.tags":"AUDIOVISUAL · COBERTURA MÉDICA",
+    "work.av.01.desc":"Registro em vídeo do primeiro transplante de menisco realizado em Marília e região. Um celular e um dia de prazo: filmado, editado e entregue sem abrir mão da qualidade profissional.",
+    "work.av.02.title":"Highlight · Cadaver Lab 01","work.av.02.tags":"AUDIOVISUAL · DIREÇÃO DE ARTE",
+    "work.av.02.desc":"Vídeo de highlights do Cadaver Lab, evento de treinamento cirúrgico ao vivo. Direção de arte assinada por mim, cuidando da linguagem visual de toda a cobertura.",
+    "work.av.03.title":"Highlight · Cadaver Lab 02","work.av.03.tags":"AUDIOVISUAL · DIREÇÃO DE ARTE",
+    "work.av.03.desc":"Segundo recorte de highlights do Cadaver Lab, com direção de arte assinada por mim, ritmo e identidade visual pensados para redes sociais.",
+    "work.av.04.title":"Highlight · Cadaver Lab 03","work.av.04.tags":"AUDIOVISUAL · DIREÇÃO DE ARTE",
+    "work.av.04.desc":"Terceiro recorte de highlights do Cadaver Lab, fechando a cobertura do evento com a mesma direção de arte da série.",
+    "work.product.01.title":"Precision MR® · Suturador de Menisco","work.product.01.tags":"3D · VISUALIZAÇÃO DE PRODUTO",
+    "work.product.01.desc":"Visualização 3D do Precision MR®, suturador de menisco desenvolvido para a Hydrumedical (Portugal). Animação que dá vida ao produto, destacando mecanismo, ergonomia e cada detalhe funcional da peça.",
+    "work.product.02.title":"KneeLink® · Sistema de Reconstrução Extra-articular","work.product.02.tags":"3D · VISUALIZAÇÃO DE PRODUTO",
+    "work.product.02.desc":"Visualização 3D do KneeLink®, sistema de reconstrução extra-articular. Animação que apresenta o produto em movimento, evidenciando seu funcionamento e principais diferenciais técnicos.",
+    "work.product.03.title":"FitlockRSC® · Âncora Sem Nó","work.product.03.tags":"3D · VISUALIZAÇÃO DE PRODUTO",
+    "work.product.03.desc":"Visualização 3D da FitlockRSC®, âncora sem nó. A animação traduz o mecanismo de fixação em imagens claras, destacando as features que diferenciam o produto no mercado.",
+    "work.events.intro":"Identidade visual completa do estande da Síntegra no CBCJ, o maior congresso de cirurgia de joelho da América Latina. Sinalização, gráfica e ambientação assinadas por mim, do conceito à produção.",
+    "work.feed.01.title":"Precision MR® · Features do Suturador de Menisco","work.feed.01.tags":"FEED · CARROSSEL DE PRODUTO",
+    "work.feed.01.desc":"Features do Precision MR®, suturador de menisco carro-chefe da Síntegra. Carrossel para redes sociais destacando os diferenciais do produto.",
+    "work.feed.02.title":"Portfólio de Ombro · Síntegra","work.feed.02.tags":"FEED · PORTFÓLIO DE PRODUTO",
+    "work.feed.02.desc":"Peça de portfólio apresentando a linha de produtos para cirurgia de ombro da Síntegra.",
+    "work.feed.03.title":"Coleção · Datas Comemorativas","work.feed.03.tags":"FEED · COLEÇÃO DE POSTS",
+    "work.feed.03.desc":"Coleção de artes para datas comemorativas, carrossel com peças desenvolvidas para o calendário de redes sociais da Síntegra.",
+    "work.feed.04.title":"Indicações de Uso · Fitlock® RSC","work.feed.04.tags":"FEED · CARROSSEL EDUCATIVO",
+    "work.feed.04.desc":"Carrossel educativo com as indicações de uso da Fitlock® RSC, âncora sem nó da Síntegra. Conteúdo técnico traduzido para redes sociais.",
     "work.placeholder.tag":"EM BREVE","work.placeholder.desc":"Trabalho em produção, detalhes em breve.",
-    "skills.eyebrow":"FERRAMENTAS & COMPETÊNCIAS","skills.title":"Como eu trabalho",
-    "skills.blender":"Desde o lançamento","skills.game":"Engines & interatividade","skills.tex":"Texturização 3D",
-    "skills.drone":"Drones & mapeamento aéreo","skills.dev.title":"Programação","skills.social.title":"Mídias Sociais",
+    "skills.eyebrow":"FERRAMENTAS & COMPETÊNCIAS","skills.title":"Caixa de Ferramentas e Skills",
+    "skills.blender":"Animação 3D","skills.game":"Engines & interatividade","skills.tex":"Texturização 3D",
+    "skills.drone":"Fotografia, filmagem, mapeamento aéreo","skills.dev.title":"Programação","skills.social.title":"Mídias Sociais",
     "skills.social":"Planejamento & conteúdo","skills.teach.title":"Didática","skills.teach":"Cursos & treinamentos",
     "contact.eyebrow":"PRÓXIMO CORTE","contact.title":"<span class=\"line\">Vamos criar</span><span class=\"line\">algo juntos</span>",
     "contact.loc":"Marília, SP, Brasil · disponível para viagens",
@@ -784,25 +983,66 @@ const i18n = {
     "scrubber.rec":"REC",
     "hero.kicker":"PORTFOLIO · DESIGN / MOTION / 3D",
     "hero.frame.scene":"SCENE 01 · TAKE 01",
-    "hero.role":'Graphic designer and <strong>motion designer</strong> with 10+ years turning complex ideas (surgeries, brands, products) into images anyone can understand.',
+    "hero.role":'Photographer, Videomaker, Graphic Designer, Motion Designer and Animator with 10+ years turning complex ideas into images anyone can understand.',
     "hero.meta1.label":"BASED IN","hero.meta1.value":"Marília, SP, Brazil",
     "hero.meta2.label":"WORKING IN","hero.meta2.value":"Health & Tech Design",
-    "hero.meta3.label":"SIGNATURE TOOL",
+    "hero.meta3.label":"SIGNATURE TOOLS",
     "hero.scroll":"SCROLL TO START",
     "about.eyebrow":"ABOUT ME",
     "about.title":"From flying drones to modeling surgeries in 3D",
     "about.p1":"I started filming out of pure curiosity: a drone, a camera, and the itch to understand how a single image can tell a whole story in seconds. What began as a hobby became a craft: editing video, shooting events, and slowly learning to design the graphics I once only admired in other people's work.",
     "about.pull":'"I use artificial intelligence the right way: as a tool that works for me, never as autopilot. It speeds up the process, but I\'m the one deciding framing, rhythm and finish. That\'s why I steer clear of generic results and deliver work that carries my signature, not a prompt\'s."',
-    "about.p2":"I also taught (computing, editing, game development) to teenagers, seniors, and professionals in training. Teaching taught me to simplify the complex, a skill I use every day in my work, turning dense surgical procedures into videos and materials that doctors, patients, and marketing teams instantly understand.",
+    "about.p2":"I also taught (computing, editing, game development, photography, and video production) to teenagers, seniors, and professionals in training. Teaching taught me to simplify the complex, a skill I use every day in my work, turning dense surgical procedures into videos and materials that doctors, patients, and marketing teams instantly understand.",
     "about.p3":"Today my work sits at the intersection of aesthetics and clarity: design that communicates, motion that explains, 3D that brings the invisible closer. And while I keep learning, I still believe the best tool is whichever one gets you closer to telling the right story.",
     "about.fact1":"Years of experience","about.fact2":"Years old, Brazilian",
     "work.eyebrow":"SELECTED WORK","work.title":"Recent projects",
-    "work.lead":"A selection of real motion and 3D videos produced for the healthcare industry.",
-    "work.cat.design":"Design","work.cat.motion":"Motion","work.cat.3d":"3D Animation","work.cat.audiovisual":"Audiovisual",
+    "work.lead":"A selection of real social media, surgical visualization and audiovisual work produced for the healthcare industry.",
+    "work.cat.feed":"Social Media Feed","work.cat.stories":"Social Media Stories","work.cat.3d":"Surgical Visualization","work.cat.audiovisual":"Audiovisual / Art Direction","work.cat.events":"Events / Booths / Giveaways","work.cat.product":"Product Visualization",
+    "work.stories.01.title":"Save the Date · CBOO Orthopedic Oncology","work.stories.01.tags":"STORY · SAVE THE DATE",
+    "work.stories.01.desc":"Save-the-date piece for CBOO, the Brazilian Congress of Orthopedic Oncology, in Florianópolis. Vertical Stories artwork aligned with the event's identity.",
+    "work.stories.02.title":"Booth · Rede D'Or Orthopedics Congress","work.stories.02.tags":"STORY · EVENT COVERAGE",
+    "work.stories.02.desc":"Promotion of Síntegra's booth at Rede D'Or's International Orthopedics Congress in Rio de Janeiro. Visual coverage of the booth for social media during the event.",
+    "work.stories.03.title":"Launch · LinkButton®","work.stories.03.tags":"STORY · PRODUCT LAUNCH",
+    "work.stories.03.desc":"Launch piece for LinkButton®, an attachable button developed by Síntegra. Product announcement for social media aimed at the orthopedics audience.",
+    "work.stories.04.title":"Booth · CBCOC","work.stories.04.tags":"STORY · EVENT COVERAGE",
+    "work.stories.04.desc":"Promotion of Síntegra's booth at CBCOC, the Brazilian Congress of Shoulder and Elbow Surgery, reinforcing brand presence during the event.",
+    "work.3d.01.title":"Concept · Interbody Cage","work.3d.01.tags":"3D · CONCEPT PROJECT",
+    "work.3d.01.desc":"Conceptual 3D visualization of an interbody cage, exploring the part's geometry and fit before manufacturing. Modeled and rendered in Blender.",
+    "work.3d.02.title":"Demo · LinkButton® Insertion","work.3d.02.tags":"3D · TECHNICAL ANIMATION",
+    "work.3d.02.desc":"3D animation demonstrating the step-by-step insertion of the LinkButton®, Síntegra's attachable button device. Educational material for medical teams and sales.",
+    "work.3d.03.title":"Meniscal Root Repair","work.3d.03.tags":"3D · SURGICAL VISUALIZATION",
+    "work.3d.03.desc":"3D animation of the surgical procedure for meniscal root tear repair, turning a complex technique into a clear, didactic sequence.",
+    "work.3d.04.title":"Double-Row Repair · Achilles Tendon","work.3d.04.tags":"3D · SURGICAL VISUALIZATION",
+    "work.3d.04.desc":"3D animation of the double-row Achilles tendon repair technique with a threaded Fitlock® anchor. Step-by-step demonstration of the procedure.",
+    "work.3d.05.title":"Glenoid Labrum Repair · Fitlock® Anchor","work.3d.05.tags":"3D · SURGICAL VISUALIZATION",
+    "work.3d.05.desc":"3D animation of glenoid labrum repair using an impacted Fitlock® anchor, showing implant positioning and fixation in the shoulder joint.",
+    "work.av.01.title":"Coverage · Region's First Meniscus Transplant","work.av.01.tags":"AUDIOVISUAL · MEDICAL COVERAGE",
+    "work.av.01.desc":"Video coverage of the first meniscus transplant performed in Marília and the surrounding region. One phone and a one-day deadline: shot, edited and delivered without giving up professional quality.",
+    "work.av.02.title":"Highlight · Cadaver Lab 01","work.av.02.tags":"AUDIOVISUAL · ART DIRECTION",
+    "work.av.02.desc":"Highlight video from the Cadaver Lab, a live surgical training event. Art direction by me, shaping the visual language of the whole coverage.",
+    "work.av.03.title":"Highlight · Cadaver Lab 02","work.av.03.tags":"AUDIOVISUAL · ART DIRECTION",
+    "work.av.03.desc":"Second highlight cut from the Cadaver Lab, art directed by me, pacing and visual identity built for social media.",
+    "work.av.04.title":"Highlight · Cadaver Lab 03","work.av.04.tags":"AUDIOVISUAL · ART DIRECTION",
+    "work.av.04.desc":"Third highlight cut from the Cadaver Lab, closing out the event coverage with the same art direction as the series.",
+    "work.product.01.title":"Precision MR® · Meniscus Suturer","work.product.01.tags":"3D · PRODUCT VISUALIZATION",
+    "work.product.01.desc":"3D visualization of the Precision MR®, a meniscus suturer developed for Hydrumedical (Portugal). Animation that brings the product to life, highlighting its mechanism, ergonomics and every functional detail.",
+    "work.product.02.title":"KneeLink® · Extra-articular Reconstruction System","work.product.02.tags":"3D · PRODUCT VISUALIZATION",
+    "work.product.02.desc":"3D visualization of the KneeLink®, an extra-articular reconstruction system. Animation that shows the product in motion, highlighting how it works and its key technical advantages.",
+    "work.product.03.title":"FitlockRSC® · Knotless Anchor","work.product.03.tags":"3D · PRODUCT VISUALIZATION",
+    "work.product.03.desc":"3D visualization of the FitlockRSC®, a knotless anchor. The animation translates the fixation mechanism into clear visuals, highlighting the features that set the product apart.",
+    "work.feed.01.title":"Precision MR® · Meniscus Suturer Features","work.feed.01.tags":"FEED · PRODUCT CAROUSEL",
+    "work.feed.01.desc":"Features of the Precision MR®, Síntegra's flagship meniscus suturer. Social media carousel highlighting the product's key advantages.",
+    "work.feed.02.title":"Shoulder Portfolio · Síntegra","work.feed.02.tags":"FEED · PRODUCT PORTFOLIO",
+    "work.feed.02.desc":"Portfolio piece presenting Síntegra's line of shoulder surgery products.",
+    "work.feed.03.title":"Collection · Commemorative Dates","work.feed.03.tags":"FEED · POST COLLECTION",
+    "work.feed.03.desc":"Collection of artwork for commemorative dates, carousel of pieces built for Síntegra's social media calendar.",
+    "work.feed.04.title":"Instructions for Use · Fitlock® RSC","work.feed.04.tags":"FEED · EDUCATIONAL CAROUSEL",
+    "work.feed.04.desc":"Educational carousel covering the instructions for use of the Fitlock® RSC, Síntegra's knotless anchor. Technical content translated for social media.",
+    "work.events.intro":"Complete visual identity for Síntegra's booth at CBCJ, the largest knee surgery congress in Latin America. Signage, graphics and booth design, from concept to production, all by me.",
     "work.placeholder.tag":"COMING SOON","work.placeholder.desc":"Work in progress, details coming soon.",
-    "skills.eyebrow":"TOOLS & SKILLS","skills.title":"How I work",
-    "skills.blender":"Since launch","skills.game":"Engines & interactivity","skills.tex":"3D texturing",
-    "skills.drone":"Drones & aerial mapping","skills.dev.title":"Programming","skills.social.title":"Social Media",
+    "skills.eyebrow":"TOOLS & SKILLS","skills.title":"Toolbox & Skills",
+    "skills.blender":"3D Animation","skills.game":"Engines & interactivity","skills.tex":"3D texturing",
+    "skills.drone":"Photography, filming, aerial mapping","skills.dev.title":"Programming","skills.social.title":"Social Media",
     "skills.social":"Planning & content","skills.teach.title":"Teaching","skills.teach":"Courses & training",
     "contact.eyebrow":"NEXT CUT","contact.title":"<span class=\"line\">Let's create</span><span class=\"line\">something together</span>",
     "contact.loc":"Marília, SP, Brazil · available for travel",
@@ -927,8 +1167,224 @@ drawers.forEach(drawer=>{
     }
   });
 });
-document.querySelector('.drawer[data-drawer="motion"]')?.classList.add('open');
-document.querySelector('.drawer[data-drawer="motion"] .drawer-head')?.setAttribute('aria-expanded','true');
+document.querySelector('.drawer[data-drawer="feed"]')?.classList.add('open');
+
+/* WORK — media carousel (mixed image/video slides, swipe + arrows + dots) */
+function initCarousel(root){
+  const track = root.querySelector('.carousel-track');
+  const slides = [...track.children];
+  let index = 0;
+
+  function playVideos(){
+    slides.forEach((s,i)=>{
+      const v = s.querySelector('video');
+      if(!v) return;
+      if(i===index){ v.play().catch(()=>{}); }
+      else v.pause();
+    });
+  }
+
+  /* click an image slide to view it enlarged (reuses the same lightbox as the event gallery) */
+  function wireImageExpand(slide){
+    const img = slide.querySelector('img');
+    if(!img) return;
+    img.classList.add('expandable');
+    img.addEventListener('click', ()=>{
+      if(root.dataset.dragged === '1') return;
+      openLightbox(img.currentSrc || img.src, img.alt || '');
+    });
+  }
+  slides.forEach(wireImageExpand);
+
+  /* single slide: no nav/drag needed, but its video (if any) still autoplays when visible */
+  if(slides.length < 2){
+    root.querySelectorAll('.carousel-nav, .carousel-dots').forEach(el=>el.remove());
+    new IntersectionObserver(entries=>{
+      entries.forEach(en=>{ if(en.isIntersecting) playVideos(); else slides[0]?.querySelector('video')?.pause(); });
+    },{threshold:0.4}).observe(root);
+    return;
+  }
+
+  const dotsWrap = root.querySelector('.carousel-dots');
+  const dots = slides.map((_,i)=>{
+    const d = document.createElement('button');
+    d.className = 'dot'+(i===0?' active':'');
+    d.setAttribute('aria-label', `Slide ${i+1}`);
+    d.addEventListener('click', ()=>goTo(i));
+    dotsWrap.appendChild(d);
+    return d;
+  });
+
+  function goTo(i){
+    index = (i + slides.length) % slides.length;
+    track.style.transform = `translateX(-${index*100}%)`;
+    dots.forEach((d,di)=>d.classList.toggle('active', di===index));
+    slides.forEach(s=>{ const v = s.querySelector('video'); if(v) v.currentTime = 0; });
+    playVideos();
+  }
+
+  root.querySelector('.carousel-nav.prev')?.addEventListener('click', e=>{ e.stopPropagation(); goTo(index-1); });
+  root.querySelector('.carousel-nav.next')?.addEventListener('click', e=>{ e.stopPropagation(); goTo(index+1); });
+
+  /* swipe / drag */
+  let startX=0, dragging=false;
+  root.addEventListener('pointerdown', e=>{ dragging=true; startX=e.clientX; root.dataset.dragged='0'; track.style.transition='none'; });
+  root.addEventListener('pointermove', e=>{
+    if(!dragging) return;
+    const dx = e.clientX - startX;
+    if(Math.abs(dx) > 5) root.dataset.dragged = '1';
+    track.style.transform = `translateX(calc(-${index*100}% + ${dx}px))`;
+  });
+  function endDrag(e){
+    if(!dragging) return;
+    dragging=false;
+    track.style.transition='';
+    const dx = e.clientX - startX;
+    if(dx < -50) goTo(index+1);
+    else if(dx > 50) goTo(index-1);
+    else goTo(index);
+  }
+  root.addEventListener('pointerup', endDrag);
+  root.addEventListener('pointerleave', e=>{ if(dragging) endDrag(e); });
+
+  /* only autoplay videos while the card is on screen */
+  new IntersectionObserver(entries=>{
+    entries.forEach(en=>{ if(en.isIntersecting) playVideos(); else slides[index]?.querySelector('video')?.pause(); });
+  },{threshold:0.4}).observe(root);
+
+  goTo(0);
+}
+document.querySelectorAll('.media.carousel').forEach(initCarousel);
+
+/* WORK — auto-load media from a per-project folder (assets/work/.../media.json).
+   1 file in the folder → single image/video, no controls.
+   2+ files → carousel automatically (initCarousel already hides nav/dots below 2 slides). */
+async function loadFolderMedia(root){
+  const folder = root.getAttribute('data-media');
+  try{
+    const res = await fetch(`${folder}/media.json`, {cache:'no-store'});
+    if(!res.ok) return;
+    const files = await res.json();
+    if(!Array.isArray(files) || !files.length) return;
+
+    const slidesHtml = files.map(f=>{
+      const isVideo = /\.(mp4|webm|mov)$/i.test(f);
+      const src = `${folder}/${encodeURIComponent(f)}`;
+      return isVideo
+        ? `<div class="slide"><video src="${src}" muted loop playsinline></video></div>`
+        : `<div class="slide"><img src="${src}" alt=""></div>`;
+    }).join('');
+
+    root.classList.remove('placeholder');
+    root.classList.add('carousel');
+    root.innerHTML = `<div class="carousel-track">${slidesHtml}</div>
+      <button class="carousel-nav prev" aria-label="Anterior">&#8249;</button>
+      <button class="carousel-nav next" aria-label="Próximo">&#8250;</button>
+      <div class="carousel-dots"></div>`;
+    initCarousel(root);
+  }catch(e){ /* pasta sem media.json ainda: mantém o placeholder "EM BREVE" */ }
+}
+document.querySelectorAll('.media[data-media]').forEach(loadFolderMedia);
+
+/* WORK — event photo gallery (masonry grid + lightbox), loaded from a folder's gallery.json */
+const lightbox = document.createElement('div');
+lightbox.className = 'lightbox';
+lightbox.innerHTML = `<button class="lightbox-close" aria-label="Fechar">&times;</button><div class="lightbox-body"><img alt=""><p class="lightbox-caption"></p></div>`;
+document.body.appendChild(lightbox);
+const lightboxImg = lightbox.querySelector('img');
+const lightboxCaption = lightbox.querySelector('.lightbox-caption');
+function openLightbox(src, caption){
+  lightboxImg.src = src; lightboxImg.alt = caption || '';
+  lightboxCaption.textContent = caption || '';
+  lightboxCaption.style.display = caption ? '' : 'none';
+  lightbox.classList.add('open');
+}
+function closeLightbox(){ lightbox.classList.remove('open'); }
+lightbox.addEventListener('click', e=>{ if(e.target === lightbox || e.target.closest('.lightbox-close')) closeLightbox(); });
+document.addEventListener('keydown', e=>{ if(e.key === 'Escape') closeLightbox(); });
+
+document.querySelectorAll('.event-gallery[data-gallery]').forEach(async root=>{
+  const folder = root.getAttribute('data-gallery');
+  try{
+    const res = await fetch(`${folder}/gallery.json`, {cache:'no-store'});
+    if(res.ok){
+      const items = await res.json();
+      if(Array.isArray(items)){
+        items.forEach(item=>{
+          const file = typeof item === 'string' ? item : item.file;
+          const caption = typeof item === 'string' ? '' : (item.caption || '');
+          const web = `${folder}/web/${encodeURIComponent(file)}`;
+          const tile = document.createElement('div');
+          tile.className = 'event-gallery-item';
+          tile.innerHTML = `<img src="${web}" loading="lazy" alt="${caption.replace(/"/g,'&quot;')}">`
+            + (caption ? `<p class="event-gallery-caption">${caption}</p>` : '');
+          tile.addEventListener('click', ()=>openLightbox(web, caption));
+          root.appendChild(tile);
+        });
+      }
+    }
+  }catch(e){ /* pasta sem gallery.json ainda */ }
+
+  /* video that ran on the booth's LED wall — hardcoded tile, click opens the media modal */
+  if(folder === 'assets/work/events'){
+    const videoId = 'k1CzTsAhUdg';
+    const tile = document.createElement('div');
+    tile.className = 'event-gallery-video';
+    const videoCaption = 'Vídeo exibido no telão de LED do estande, apresentação do portfólio de cirurgia de joelho.';
+    tile.innerHTML = `<img src="https://i.ytimg.com/vi/${videoId}/hqdefault.jpg" alt="" loading="lazy"><span class="play-btn"></span><p class="event-gallery-caption">${videoCaption}</p>`;
+    tile.addEventListener('click', ()=>{
+      openMediaModal(`<iframe src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1"
+        title="YouTube video player" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`, false);
+    });
+    root.appendChild(tile);
+  }
+});
+
+/* WORK — click-to-play media (thumb + play button that opens a modal player over the site) */
+const mediaModal = document.createElement('div');
+mediaModal.className = 'media-modal';
+mediaModal.innerHTML = `<button class="media-modal-close" aria-label="Fechar">&times;</button><div class="frame"></div>`;
+document.body.appendChild(mediaModal);
+const mediaModalFrame = mediaModal.querySelector('.frame');
+function openMediaModal(html, vertical){
+  mediaModalFrame.classList.toggle('is-vertical', !!vertical);
+  mediaModalFrame.innerHTML = html;
+  mediaModal.classList.add('open');
+}
+function closeMediaModal(){
+  mediaModal.classList.remove('open');
+  mediaModalFrame.innerHTML = ''; // stops playback (video/iframe removed)
+}
+mediaModal.addEventListener('click', e=>{ if(e.target === mediaModal || e.target.closest('.media-modal-close')) closeMediaModal(); });
+document.addEventListener('keydown', e=>{ if(e.key === 'Escape') closeMediaModal(); });
+
+document.querySelectorAll('.media[data-modal-youtube]').forEach(root=>{
+  const id = root.getAttribute('data-modal-youtube') || '';
+  if(!id || id.startsWith('COLE-O-ID-AQUI')) return;
+  root.classList.remove('placeholder');
+  root.classList.add('click-play');
+  root.style.backgroundImage = `url('https://i.ytimg.com/vi/${encodeURIComponent(id)}/hqdefault.jpg')`;
+  root.innerHTML = `<span class="play-btn"></span>`;
+  root.addEventListener('click', ()=>{
+    openMediaModal(`<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1"
+      title="YouTube video player" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`, false);
+  });
+});
+
+document.querySelectorAll('.media[data-modal-video]').forEach(root=>{
+  const src = root.getAttribute('data-modal-video');
+  const thumb = root.getAttribute('data-modal-thumb');
+  if(!src) return;
+  root.classList.remove('placeholder');
+  root.classList.add('click-play');
+  if(thumb) root.style.backgroundImage = `url('${thumb}')`;
+  root.innerHTML = `<span class="play-btn"></span>`;
+  root.addEventListener('click', ()=>{
+    openMediaModal(`<video src="${src}" controls autoplay playsinline></video>`, true);
+  });
+});
+
+document.querySelector('.drawer[data-drawer="feed"] .drawer-head')?.setAttribute('aria-expanded','true');
 </script>
 </body>
 </html>

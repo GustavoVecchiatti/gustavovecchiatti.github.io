@@ -1,0 +1,18 @@
+Visualização Cirúrgica usa vídeos EMBEDADOS DO YOUTUBE (não arquivo local),
+no formato clique-para-tocar: o card mostra a thumbnail do vídeo com um botão
+de play, e ao clicar abre o player num modal por cima do site.
+
+Como plugar/trocar um vídeo:
+1. Suba o vídeo no YouTube (pode ser "não listado" se não quiser que apareça
+   na busca/canal — o link ainda funciona embedado no site).
+2. Pegue o ID do vídeo na URL, ex.: em
+   https://www.youtube.com/watch?v=abcDEF1234  o ID é  abcDEF1234
+3. Abra o index.html, procure pelo card e troque o valor do atributo
+   data-modal-youtube:
+
+   <div class="media video placeholder" data-modal-youtube="abcDEF1234">...
+
+4. Pronto — o JS detecta e monta a thumbnail (via i.ytimg.com) + botão de play
+   automaticamente. Clicar abre o vídeo com autoplay num modal escurecido.
+
+Se preferir, me manda os links que eu já troco direto no código.

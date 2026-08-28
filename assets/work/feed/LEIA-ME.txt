@@ -1,0 +1,27 @@
+Cada trabalho do Feed tem sua propria pasta: feed-01/ feed-02/ feed-03/ feed-04/
+(um pra cada card "Feed 0X" na pagina). Proporcao: 1080x1350.
+
+COMO USAR:
+1. Jogue os arquivos (imagens e/ou videos, max 15MB cada) dentro da pasta do projeto,
+   ex.: assets/work/feed/feed-01/foto1.jpg
+2. Abra o media.json dessa mesma pasta e liste os nomes dos arquivos, na ordem que
+   quer que apareçam. Exemplo com 3 arquivos:
+
+   ["foto1.jpg", "video1.mp4", "foto2.jpg"]
+
+   Exemplo com 1 arquivo so (sem carrossel, so a peca fica visivel):
+
+   ["foto1.jpg"]
+
+3. So isso. O site detecta sozinho:
+   - media.json vazio "[]" (ou pasta sem arquivo nenhum) → mantem "EM BREVE".
+   - 1 arquivo listado → mostra so ele, sem setas/bolinhas.
+   - 2+ arquivos listados → vira carrossel automatico (arraste, setas, bolinhas).
+
+Formatos aceitos: jpg/png/webp (imagem), mp4/webm/mov (video, toca em loop e mudo).
+
+IMPORTANTE PARA TESTAR LOCALMENTE: como isso usa fetch() pra ler o media.json, abrir
+o index.html direto no navegador (file://) pode nao funcionar por causa de bloqueio
+de CORS. Rode um servidor local na pasta do projeto, por exemplo:
+  python -m http.server 8000
+e acesse http://localhost:8000 — no GitHub Pages (produção) funciona normalmente.

@@ -1,0 +1,21 @@
+Pastas por categoria: feed/ stories/ 3d/ audiovisual/ events/ product/
+
+FEED, STORIES, EVENTS e PRODUCT ja usam deteccao automatica de carrossel por pasta:
+cada projeto tem sua propria subpasta (feed-01/, events-01/, product-01/, etc.) com
+um media.json listando os arquivos. 1 arquivo = imagem/video unico, 2+ = carrossel.
+Veja assets/work/feed/LEIA-ME.txt (funciona igual pras outras, so muda o caminho).
+
+3D / AUDIOVISUAL: ainda usam o modelo manual — copie o markup do carrossel direto
+no index.html, dentro do card ".project" desejado:
+
+<div class="media carousel">
+  <div class="carousel-track">
+    <div class="slide"><img src="assets/work/<categoria>/nome-01.jpg" alt="..."></div>
+    <div class="slide"><video src="assets/work/<categoria>/nome-02.mp4" muted loop playsinline></video></div>
+  </div>
+  <button class="carousel-nav prev" aria-label="Anterior">&#8249;</button>
+  <button class="carousel-nav next" aria-label="Proximo">&#8250;</button>
+  <div class="carousel-dots"></div>
+</div>
+
+Limite recomendado: 15MB por arquivo. Formatos: jpg/png/webp (imagem), mp4 (video).
